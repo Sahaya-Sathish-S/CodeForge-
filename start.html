@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CodeForge Start</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Arial, sans-serif;
+background:url("background.png") center center/cover no-repeat;
+position:relative;
+cursor:pointer;
+}
+
+/* Dark overlay */
+body::before{
+content:'';
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.45);
+}
+
+/* Center box */
+.tap-box{
+position:relative;
+z-index:2;
+text-align:center;
+padding:35px 45px;
+border-radius:22px;
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,.12);
+box-shadow:
+0 0 25px rgba(0,204,255,.35),
+0 0 35px rgba(255,102,0,.25);
+animation:float 2s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+}
+
+.logo{
+font-size:48px;
+font-weight:900;
+background:linear-gradient(90deg,#00d9ff,#ffffff,#ff6600);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+text-shadow:0 0 20px #00ccff;
+margin-bottom:15px;
+letter-spacing:2px;
+}
+
+.text{
+font-size:24px;
+color:white;
+letter-spacing:3px;
+animation:blink 1.2s infinite;
+}
+
+@keyframes blink{
+0%,100%{opacity:1;}
+50%{opacity:.4;}
+}
+
+/* Mobile */
+@media(max-width:700px){
+.logo{font-size:34px;}
+.text{font-size:18px;}
+.tap-box{
+width:90%;
+padding:25px;
+}
+}
+</style>
+</head>
+
+<body onclick="openHome()">
+
+<div class="tap-box">
+<div class="logo">CODEFORGE</div>
+<div class="text">TAP ANYWHERE TO START</div>
+</div>
+
+<script>
+function openHome(){
+window.location.href="home.html";
+}
+</script>
+
+</body>
+</html>

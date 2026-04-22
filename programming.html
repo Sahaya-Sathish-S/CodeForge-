@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CodeForge Programming Arena</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+background:#000;
+color:#fff;
+}
+
+/* BACKGROUND */
+body{
+background:url("background.png") center center/cover no-repeat fixed;
+position:relative;
+}
+
+body::before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,
+rgba(0,0,0,.88),
+rgba(0,30,60,.65),
+rgba(0,0,0,.88));
+z-index:0;
+}
+
+body::after{
+content:"";
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle,rgba(0,255,255,.25) 1px,transparent 1px),
+radial-gradient(circle,rgba(255,0,255,.18) 1px,transparent 1px);
+background-size:40px 40px,70px 70px;
+animation:stars 8s linear infinite;
+z-index:0;
+}
+
+@keyframes stars{
+from{transform:translateY(0)}
+to{transform:translateY(80px)}
+}
+
+/* MAIN */
+.main{
+position:relative;
+z-index:2;
+width:100%;
+height:100%;
+padding:16px;
+display:flex;
+flex-direction:column;
+gap:14px;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 18px;
+border-radius:20px;
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(14px);
+box-shadow:0 0 20px rgba(0,255,255,.18);
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+letter-spacing:1px;
+text-shadow:0 0 12px #00ffff;
+}
+
+.status{
+color:#00ff88;
+font-weight:bold;
+}
+
+/* SETUP */
+.setup{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+padding:12px;
+border-radius:18px;
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(10px);
+}
+
+select,button{
+padding:14px;
+border:none;
+outline:none;
+border-radius:14px;
+font-size:16px;
+font-weight:bold;
+}
+
+select{
+flex:1;
+background:rgba(255,255,255,.09);
+color:#fff;
+min-width:180px;
+}
+
+button{
+cursor:pointer;
+background:linear-gradient(90deg,#00ffff,#0066ff);
+color:#fff;
+box-shadow:0 0 18px #00ffff;
+transition:.2s;
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+/* GAME AREA */
+.grid{
+flex:1;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+min-height:0;
+}
+
+/* CARD */
+.card{
+background:rgba(255,255,255,.05);
+border-radius:20px;
+backdrop-filter:blur(12px);
+padding:14px;
+display:flex;
+flex-direction:column;
+box-shadow:0 0 16px rgba(255,255,255,.08);
+min-height:0;
+}
+
+.card h2{
+font-size:20px;
+margin-bottom:10px;
+}
+
+/* QUESTION */
+.problem{
+flex:1;
+overflow:auto;
+line-height:1.6;
+font-size:17px;
+padding:10px;
+border-radius:14px;
+background:rgba(0,0,0,.35);
+}
+
+/* TIMER */
+.timer{
+font-size:34px;
+font-weight:bold;
+text-align:center;
+margin-bottom:12px;
+color:#ffe600;
+text-shadow:0 0 10px #ffe600;
+}
+
+/* EDITOR */
+textarea{
+flex:1;
+resize:none;
+border:none;
+outline:none;
+border-radius:16px;
+padding:14px;
+font-size:15px;
+background:#0a0f18;
+color:#00ffcc;
+line-height:1.5;
+box-shadow:inset 0 0 18px rgba(0,255,255,.15);
+}
+
+/* BOT BOX */
+.botbox{
+flex:1;
+border-radius:16px;
+padding:14px;
+background:#0b111b;
+overflow:auto;
+white-space:pre-wrap;
+line-height:1.5;
+color:#ffcc66;
+}
+
+/* FOOT */
+.actions{
+display:flex;
+gap:12px;
+margin-top:12px;
+}
+
+.submit{
+flex:1;
+background:linear-gradient(90deg,#00ff88,#00aa66);
+box-shadow:0 0 18px #00ff88;
+}
+
+.result{
+position:fixed;
+inset:0;
+display:none;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.75);
+z-index:99;
+}
+
+.popup{
+width:92%;
+max-width:700px;
+padding:22px;
+border-radius:24px;
+background:#081018;
+box-shadow:0 0 30px #00ffff;
+text-align:center;
+}
+
+.popup h1{
+font-size:38px;
+margin-bottom:14px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:12px;
+}
+
+.box{
+padding:12px;
+border-radius:14px;
+background:rgba(255,255,255,.07);
+}
+
+/* MOBILE */
+@media(max-width:900px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="main">
+
+<!-- TOP -->
+<div class="topbar">
+<div class="logo">⚔ CodeForge Arena</div>
+<div class="status">ONLINE</div>
+</div>
+
+<!-- SETUP -->
+<div class="setup">
+<select id="lang">
+<option value="Python">Python</option>
+<option value="C">C</option>
+<option value="C++">C++</option>
+<option value="Java">Java</option>
+<option value="JavaScript">JavaScript</option>
+<option value="HTML">HTML</option>
+<option value="CSS">CSS</option>
+<option value="SQL">SQL</option>
+<option value="MongoDB">MongoDB</option>
+</select>
+
+<button onclick="startBattle()">🚀 START BATTLE</button>
+</div>
+
+<!-- GAME -->
+<div class="grid">
+
+<!-- LEFT -->
+<div class="card">
+<h2>📘 Problem Statement</h2>
+<div class="timer" id="timer">60</div>
+<div class="problem" id="problem">
+Select language and click Start Battle.
+</div>
+</div>
+
+<!-- RIGHT -->
+<div class="card">
+<h2>💻 Your Code</h2>
+<textarea id="code" placeholder="Write your code here..."></textarea>
+
+<div class="actions">
+<button class="submit" onclick="submitBattle()">✅ SUBMIT</button>
+</div>
+
+<h2 style="margin-top:12px;">🤖 Opponent</h2>
+<div class="botbox" id="botcode">Waiting...</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- RESULT -->
+<div class="result" id="result">
+<div class="popup">
+<h1 id="winner">🏆 YOU WIN</h1>
+
+<div class="stats">
+<div class="box">⏱ Your Time: <span id="mytime">0</span>s</div>
+<div class="box">🤖 Bot Time: <span id="bottime">0</span>s</div>
+<div class="box">✅ Your Score: <span id="myscore">0</span></div>
+<div class="box">🤖 Bot Score: <span id="botscore">0</span></div>
+</div>
+
+<button style="margin-top:18px;" onclick="location.reload()">PLAY AGAIN</button>
+</div>
+</div>
+
+<script>
+let time=60;
+let timerInt=null;
+let started=false;
+let userSpent=0;
+let botSpent=Math.floor(Math.random()*30)+15;
+
+/* START */
+async function startBattle(){
+
+if(started) return;
+started=true;
+
+const lang=document.getElementById("lang").value;
+
+document.getElementById("problem").innerHTML="Loading AI Problem...";
+document.getElementById("botcode").innerHTML="Opponent preparing...";
+
+try{
+
+let res=await fetch("/start_problem",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({language:lang})
+});
+
+let data=await res.json();
+
+document.getElementById("problem").innerText=data.problem;
+typeBot(data.bot_code);
+
+}catch(err){
+document.getElementById("problem").innerText="Server error loading problem.";
+}
+
+timerInt=setInterval(()=>{
+time--;
+document.getElementById("timer").innerText=time;
+
+if(time<=0){
+clearInterval(timerInt);
+submitBattle();
+}
+
+},1000);
+
+}
+
+/* BOT TYPING */
+function typeBot(text){
+let box=document.getElementById("botcode");
+box.innerHTML="";
+let i=0;
+
+let inter=setInterval(()=>{
+box.innerHTML+=text.charAt(i);
+box.scrollTop=box.scrollHeight;
+i++;
+
+if(i>=text.length){
+clearInterval(inter);
+}
+},25);
+}
+
+/* SUBMIT */
+async function submitBattle(){
+
+if(!started) return;
+
+clearInterval(timerInt);
+
+userSpent=60-time;
+
+let code=document.getElementById("code").value.trim();
+let lang=document.getElementById("lang").value;
+let problem=document.getElementById("problem").innerText;
+
+if(code=="") code="No code submitted";
+
+try{
+
+let res=await fetch("/check_battle",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+language:lang,
+problem:problem,
+user_code:code,
+user_time:userSpent,
+bot_time:botSpent
+})
+});
+
+let data=await res.json();
+
+showResult(data);
+
+}catch(err){
+
+showResult({
+winner:"⚠ ERROR",
+my_score:0,
+bot_score:0,
+my_time:userSpent,
+bot_time:botSpent
+});
+
+}
+
+}
+
+/* RESULT */
+function showResult(data){
+
+document.getElementById("winner").innerText=data.winner;
+document.getElementById("mytime").innerText=data.my_time;
+document.getElementById("bottime").innerText=data.bot_time;
+document.getElementById("myscore").innerText=data.my_score;
+document.getElementById("botscore").innerText=data.bot_score;
+
+document.getElementById("result").style.display="flex";
+}
+</script>
+
+</body>
+</html>

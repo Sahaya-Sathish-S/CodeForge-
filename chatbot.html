@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CodeForge AI Assistant</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,Arial,sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+background:
+radial-gradient(circle at top left,#1a2cff,#000814 35%),
+radial-gradient(circle at bottom right,#ff00aa,#050510 35%),
+linear-gradient(135deg,#02020a,#06061a,#000);
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* floating bg */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle,#00ffff55 1px,transparent 1px),
+radial-gradient(circle,#ff00ff44 1px,transparent 1px);
+background-size:45px 45px,70px 70px;
+animation:movebg 10s linear infinite;
+pointer-events:none;
+}
+
+@keyframes movebg{
+from{transform:translateY(0)}
+to{transform:translateY(80px)}
+}
+
+/* MAIN CHAT */
+.chat{
+width:95%;
+max-width:1100px;
+height:95vh;
+border-radius:28px;
+overflow:hidden;
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(18px);
+box-shadow:
+0 0 35px #00ffff33,
+0 0 60px #ff00aa22;
+border:1px solid rgba(255,255,255,.08);
+display:flex;
+flex-direction:column;
+}
+
+/* TOP BAR */
+.top{
+padding:18px 22px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:rgba(255,255,255,.04);
+border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.logo{
+width:58px;
+height:58px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+background:linear-gradient(135deg,#00ffff,#0066ff,#ff00ff);
+box-shadow:0 0 22px #00ffff;
+animation:pulse 1.8s infinite;
+}
+
+@keyframes pulse{
+50%{transform:scale(1.08)}
+}
+
+.title h1{
+font-size:24px;
+color:#fff;
+font-weight:700;
+}
+
+.title p{
+font-size:13px;
+color:#9fdcff;
+margin-top:3px;
+}
+
+.status{
+padding:8px 14px;
+border-radius:30px;
+font-size:13px;
+font-weight:700;
+color:#fff;
+background:linear-gradient(135deg,#00ff88,#00cc66);
+box-shadow:0 0 14px #00ff88;
+}
+
+/* CHAT AREA */
+.box{
+flex:1;
+padding:22px;
+overflow-y:auto;
+scroll-behavior:smooth;
+}
+
+.box::-webkit-scrollbar{
+width:6px;
+}
+.box::-webkit-scrollbar-thumb{
+background:#00ffff55;
+border-radius:10px;
+}
+
+/* MESSAGES */
+.row{
+display:flex;
+margin:12px 0;
+animation:fade .25s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.row.user{
+justify-content:flex-end;
+}
+
+.msg{
+max-width:78%;
+padding:15px 18px;
+border-radius:20px;
+line-height:1.55;
+font-size:15px;
+white-space:pre-wrap;
+word-wrap:break-word;
+color:#fff;
+}
+
+.user .msg{
+background:linear-gradient(135deg,#00c6ff,#0072ff,#0040ff);
+box-shadow:0 0 18px #00c6ff55;
+border-bottom-right-radius:6px;
+}
+
+.bot .msg{
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.06);
+box-shadow:0 0 15px #ffffff11;
+border-bottom-left-radius:6px;
+}
+
+/* typing */
+.typing{
+display:flex;
+gap:6px;
+padding:14px 18px;
+width:80px;
+border-radius:18px;
+background:rgba(255,255,255,.08);
+}
+
+.dot{
+width:9px;
+height:9px;
+border-radius:50%;
+background:#00ffff;
+animation:bounce .8s infinite;
+}
+
+.dot:nth-child(2){animation-delay:.15s}
+.dot:nth-child(3){animation-delay:.3s}
+
+@keyframes bounce{
+50%{transform:translateY(-8px);opacity:.5}
+}
+
+/* BOTTOM */
+.bottom{
+padding:16px;
+display:flex;
+gap:12px;
+background:rgba(255,255,255,.03);
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+input{
+flex:1;
+padding:16px 18px;
+border:none;
+outline:none;
+border-radius:16px;
+font-size:15px;
+color:#fff;
+background:rgba(255,255,255,.08);
+}
+
+input::placeholder{
+color:#9adfff;
+}
+
+.send{
+width:62px;
+border:none;
+cursor:pointer;
+border-radius:16px;
+font-size:22px;
+color:#fff;
+background:linear-gradient(135deg,#ff00ff,#00ffff,#0066ff);
+box-shadow:0 0 18px #00ffff88;
+transition:.2s;
+}
+
+.send:hover{
+transform:scale(1.06);
+}
+
+@media(max-width:700px){
+.chat{
+width:100%;
+height:100vh;
+border-radius:0;
+}
+.msg{
+max-width:88%;
+font-size:14px;
+}
+.title h1{
+font-size:20px;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="chat">
+
+<!-- TOP -->
+<div class="top">
+<div class="brand">
+<div class="logo">🤖</div>
+<div class="title">
+<h1>CodeForge AI</h1>
+<p>Smart Professional Assistant</p>
+</div>
+</div>
+
+<div class="status">ONLINE</div>
+</div>
+
+<!-- CHAT -->
+<div class="box" id="box"></div>
+
+<!-- INPUT -->
+<div class="bottom">
+<input id="input" placeholder="Ask anything...">
+<button class="send" onclick="send()">➤</button>
+</div>
+
+</div>
+
+<script>
+const box=document.getElementById("box");
+const input=document.getElementById("input");
+
+/* START MESSAGE */
+window.onload=()=>{
+addBot("👋 Hello! I'm CodeForge AI.\nHow can I help you today?");
+speak("Hello. I am CodeForge AI. How can I help you today?");
+}
+
+/* ENTER KEY */
+input.addEventListener("keydown",e=>{
+if(e.key==="Enter") send();
+});
+
+/* MESSAGE UI */
+function addUser(text){
+let row=document.createElement("div");
+row.className="row user";
+row.innerHTML=`<div class="msg">${escapeHtml(text)}</div>`;
+box.appendChild(row);
+scrollDown();
+}
+
+function addBot(text){
+let row=document.createElement("div");
+row.className="row bot";
+row.innerHTML=`<div class="msg">${escapeHtml(text)}</div>`;
+box.appendChild(row);
+scrollDown();
+}
+
+/* typing */
+function showTyping(){
+let row=document.createElement("div");
+row.className="row bot";
+row.id="typingRow";
+row.innerHTML=`
+<div class="typing">
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+</div>`;
+box.appendChild(row);
+scrollDown();
+}
+
+function hideTyping(){
+let t=document.getElementById("typingRow");
+if(t) t.remove();
+}
+
+/* SEND */
+async function send(){
+let text=input.value.trim();
+if(!text) return;
+
+addUser(text);
+input.value="";
+showTyping();
+
+try{
+let res=await fetch("/ask",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({message:text})
+});
+
+if(!res.ok) throw new Error();
+
+let data=await res.json();
+
+hideTyping();
+typeReply(data.reply || "No response.");
+
+}catch(err){
+hideTyping();
+addBot("❌ Server not connected or AI unavailable.");
+}
+}
+
+/* typing effect */
+function typeReply(text){
+let row=document.createElement("div");
+row.className="row bot";
+
+let bubble=document.createElement("div");
+bubble.className="msg";
+row.appendChild(bubble);
+box.appendChild(row);
+
+let i=0;
+
+let inter=setInterval(()=>{
+bubble.innerText += text.charAt(i);
+i++;
+scrollDown();
+
+if(i>=text.length){
+clearInterval(inter);
+speak(text.substring(0,180));
+}
+},15);
+}
+
+/* VOICE */
+function speak(text){
+try{
+speechSynthesis.cancel();
+let msg=new SpeechSynthesisUtterance(text);
+msg.rate=.95;
+msg.pitch=1;
+msg.volume=1;
+speechSynthesis.speak(msg);
+}catch(e){}
+}
+
+/* HELPERS */
+function scrollDown(){
+box.scrollTop=box.scrollHeight;
+}
+
+function escapeHtml(str){
+return str
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
+}
+</script>
+
+</body>
+</html>

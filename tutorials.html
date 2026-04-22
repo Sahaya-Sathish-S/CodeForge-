@@ -1,0 +1,7019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CodeForge Python Mastery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #050b18;
+            color: #fff;
+        }
+
+        /* Flowing Background Effect */
+        body {
+            background: linear-gradient(135deg, #050b18 0%, #0a132e 50%, #050b18 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            gap: 15px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 234, 255, 0.15);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #00eaff, #ffffff, #00eaff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .status {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00ff99;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+        }
+
+        .main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 15px;
+            min-height: 0;
+        }
+
+        .panel {
+            background: rgba(10, 20, 40, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #00eaff rgba(0,0,0,0);
+        }
+
+        /* Custom Scrollbar */
+        .panel::-webkit-scrollbar { width: 6px; }
+        .panel::-webkit-scrollbar-thumb { background: #00eaff; border-radius: 10px; }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #00eaff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .class-btn {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            color: rgba(255,255,255,0.7);
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .class-btn:hover {
+            background: rgba(0, 234, 255, 0.1);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .class-btn.active {
+            background: linear-gradient(90deg, #00eaff, #008cff);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 234, 255, 0.4);
+            border: none;
+        }
+
+        .lesson-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #fff;
+            border-left: 5px solid #00eaff;
+            padding-left: 15px;
+        }
+
+        .content-section {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .lesson-text {
+            font-size: 18px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            color: #ccd6f6;
+        }
+
+        .quiz-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 234, 255, 0.1), rgba(0, 140, 255, 0.1));
+            border: 1px solid rgba(0, 234, 255, 0.2);
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(90deg, #00eaff, #008cff);
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 15px rgba(0, 234, 255, 0.5);
+        }
+
+        .progress-card {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #00ff99;
+        }
+
+        @media(max-width: 1100px) {
+            .main { grid-template-columns: 1fr; overflow-y: auto; }
+            .panel { height: auto; overflow: visible; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false">
+
+<div class="wrapper">
+    <div class="top">
+        <div class="logo">⚔ CODEFORGE PYTHON</div>
+        <div class="status" id="statusText">System Initialized</div>
+    </div>
+
+    <div class="main">
+        <div class="panel">
+            <h2>📅 30 Day Roadmap</h2>
+            <div id="classList">
+                <p style="color: #666; padding: 10px;">Loading Python Curriculum...</p>
+            </div>
+        </div>
+
+        <div class="panel" id="contentArea">
+            <div id="welcomeView">
+                <div class="lesson-title">Welcome to Python Mastery</div>
+                <div class="content-section">
+                    <p class="lesson-text">
+                        You are about to start a comprehensive 30-day Python Journey.
+                        Select <b>Day 1</b> to begin.
+                        
+                        <b>Features:</b>
+                        • Dynamic Lesson Extraction
+                        • Smart Content Sorting
+                        • Automatic Voice Narration
+                        • Real-time Progress Tracking
+                    </p>
+                </div>
+            </div>
+
+            <div id="lessonView" style="display:none;">
+                <div class="lesson-title" id="lessonTitle">Day X</div>
+                <div class="content-section">
+                    <div class="lesson-text" id="lessonText"></div>
+                </div>
+
+                <div class="quiz-box" id="quizBox">
+                    <h3 style="color:#ffe600; margin-bottom:10px;">📝 Quick Quiz</h3>
+                    <div id="quizQ" style="font-size:18px; margin-bottom:10px;"></div>
+                    <input id="quizAns" placeholder="Type your answer here...">
+                    <button class="btn" onclick="checkAnswer()">Validate Knowledge</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>📊 Dashboard</h2>
+            <div class="progress-card">
+                <div>Course Progress</div>
+                <div style="font-size: 24px; font-weight: bold; color: #00eaff;"><span id="done">0</span> / 30</div>
+            </div>
+            
+            <div class="progress-card" style="border-left-color: #ffe600;">
+                <div>Success Rate</div>
+                <div style="font-size: 20px; font-weight: bold;"><span id="score">0</span> Points</div>
+            </div>
+
+            <h2>🤖 AI Summary</h2>
+            <div id="notes" class="lesson-text" style="font-size: 15px;">
+                Select a day to generate AI notes.
+            </div>
+
+            <button class="btn" style="width:100%; margin-top:20px; background: #1a1a1a; border: 1px solid #00ff99;" 
+                    onclick="downloadCertificate()">🎓 Claim Certificate</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// RAW DATA - The text file content is handled here
+const rawTutorialData = `DAY: 1
+TITLE: Python Introduction + Environment Setup
+EXPLANATION:
+Python is one of the most popular programming languages in the world. It is easy to learn, powerful, and used in many fields such as:
+Web Development
+Artificial Intelligence
+Data Science
+Automation
+Game Development
+Cybersecurity
+App Development
+Python was created by Guido van Rossum and first released in 1991.
+Why Learn Python?
+Simple English-like syntax
+Beginner friendly
+Huge community support
+Works on Windows, Linux, Mac
+High salary career opportunities
+Installing Python
+Download Python from python.org
+Install it
+Tick Add Python to PATH
+Finish installation
+Check Installation
+Open terminal / command prompt:
+Bash
+python --version
+Your First Python Program
+Python
+print("Hello, World!")
+Output:
+Plain text
+Hello, World!
+Understanding print()
+print() is used to display output on the screen.
+Examples:
+Python
+print("Welcome")
+print(100)
+print("Python is fun")
+QUIZ:
+Who created Python?
+In which year was Python released?
+What function is used to display output?
+Is Python beginner friendly?
+Name any 2 fields where Python is used.
+CODING PROBLEM:
+Write a Python program to print:
+Plain text
+My name is Alex
+I am learning Python
+Day 1 completed
+HOMEWORK:
+Install Python on your system
+Run 5 different print() statements
+Print your name, age, and city using Python
+NOTES_SUMMARY:
+Python is easy and powerful
+Used in AI, web, automation, data science
+print() displays output
+First program: print("Hello, World!")
+
+DAY: 2
+TITLE: Variables and Data Types
+
+EXPLANATION:
+
+In Python, a variable is used to store data in memory so that we can use it later in the program.
+
+Think of a variable like a labeled box:
+name = "Alex"
+
+Here:
+- name is the variable name
+- "Alex" is the value stored inside it
+
+Python creates variables using the = assignment operator.
+
+Example:
+
+name = "John"
+age = 20
+price = 99.5
+
+print(name)
+print(age)
+print(price)
+
+OUTPUT:
+John
+20
+99.5
+
+
+RULES FOR VARIABLE NAMES:
+1. Must start with a letter or underscore (_)
+2. Cannot start with a number
+3. Cannot contain spaces
+4. Use meaningful names
+5. Case-sensitive (age and Age are different)
+
+Valid:
+student_name
+_age
+marks1
+
+Invalid:
+1name
+my name
+class
+
+
+MAIN DATA TYPES IN PYTHON:
+
+1. Integer (int)
+Whole numbers
+
+age = 21
+count = 100
+
+2. Float (float)
+Decimal numbers
+
+price = 45.75
+pi = 3.14
+
+3. String (str)
+Text inside quotes
+
+name = "Alex"
+city = 'Chennai'
+
+4. Boolean (bool)
+True or False values
+
+is_student = True
+is_logged_in = False
+
+
+CHECK DATA TYPE USING type()
+
+name = "Alex"
+age = 22
+
+print(type(name))
+print(type(age))
+
+OUTPUT:
+<class 'str'>
+<class 'int'>
+
+
+MULTIPLE VARIABLES:
+
+a = 10
+b = 20
+c = 30
+
+print(a, b, c)
+
+
+REASSIGNING VARIABLES:
+
+score = 50
+print(score)
+
+score = 80
+print(score)
+
+OUTPUT:
+50
+80
+
+Python allows changing values anytime.
+
+
+QUIZ:
+
+1. What is a variable?
+2. Which symbol is used to assign a value?
+3. What data type is 25.6?
+4. What data type is "Hello"?
+5. Is Python case-sensitive for variable names?
+
+
+CODING PROBLEM:
+
+Create variables for:
+- your_name
+- your_age
+- your_city
+
+Print them in 3 separate lines.
+
+
+Example:
+
+your_name = "Sathish"
+your_age = 19
+your_city = "Chennai"
+
+print(your_name)
+print(your_age)
+print(your_city)
+
+
+HOMEWORK:
+
+1. Create 5 variables with different names
+2. Store integer, float, string, boolean values
+3. Print type of each variable using type()
+4. Try changing a variable value and print again
+
+
+NOTES_SUMMARY:
+
+- Variables store values
+- Use = to assign data
+- Main data types:
+  int, float, str, bool
+- type() checks data type
+- Variables can be changed anytime
+
+DAY: 3
+TITLE: Input and Output in Python
+
+EXPLANATION:
+
+Programs become useful when they interact with users.  
+Python allows us to:
+
+1. Take input from the user
+2. Process the data
+3. Show output
+
+This is the basic flow of every program.
+
+
+-----------------------------------
+1. OUTPUT USING print()
+-----------------------------------
+
+The print() function is used to display information on the screen.
+
+Examples:
+
+print("Hello")
+print(100)
+print("Welcome to Python")
+
+OUTPUT:
+Hello
+100
+Welcome to Python
+
+
+You can print multiple values:
+
+name = "Alex"
+age = 20
+
+print(name, age)
+
+OUTPUT:
+Alex 20
+
+
+-----------------------------------
+2. INPUT USING input()
+-----------------------------------
+
+The input() function is used to take data from the user.
+
+Example:
+
+name = input("Enter your name: ")
+print(name)
+
+If user types:
+John
+
+OUTPUT:
+John
+
+
+Explanation:
+- input() waits for the user to type something
+- Whatever user types is stored in variable
+- Input value is stored as STRING by default
+
+
+-----------------------------------
+3. INPUT ALWAYS RETURNS STRING
+-----------------------------------
+
+Example:
+
+age = input("Enter age: ")
+print(age)
+print(type(age))
+
+If user enters:
+19
+
+OUTPUT:
+19
+<class 'str'>
+
+
+Even if the user types numbers, Python treats it as text.
+
+
+-----------------------------------
+4. CONVERT INPUT TO INTEGER
+-----------------------------------
+
+Use int() when taking numeric input.
+
+age = int(input("Enter age: "))
+print(age)
+print(type(age))
+
+If user enters:
+19
+
+OUTPUT:
+19
+<class 'int'>
+
+
+-----------------------------------
+5. CONVERT INPUT TO FLOAT
+-----------------------------------
+
+height = float(input("Enter height: "))
+print(height)
+
+If user enters:
+5.8
+
+OUTPUT:
+5.8
+
+
+-----------------------------------
+6. COMBINE INPUT + OUTPUT
+-----------------------------------
+
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))
+
+print("Hello", name)
+print("You are", age, "years old")
+
+
+-----------------------------------
+7. SIMPLE ADDITION PROGRAM
+-----------------------------------
+
+num1 = int(input("Enter first number: "))
+num2 = int(input("Enter second number: "))
+
+sum = num1 + num2
+
+print("Total =", sum)
+
+
+-----------------------------------
+IMPORTANT NOTE:
+-----------------------------------
+
+If you forget int():
+
+num1 = input(...)
+num2 = input(...)
+
+Then:
+"5" + "3" = "53"
+
+Because strings join together.
+
+
+QUIZ:
+
+1. Which function is used for output?
+2. Which function is used for input?
+3. What type does input() return by default?
+4. Which function converts text to integer?
+5. What happens if "5" + "3" as strings?
+
+
+CODING PROBLEM:
+
+Write a program that asks the user:
+
+- Name
+- Age
+- City
+
+Then print:
+
+Hello <name>
+You are <age> years old
+You live in <city>
+
+
+HOMEWORK:
+
+1. Create a program to add two numbers using input()
+2. Create a program to take marks and print them
+3. Take decimal input using float()
+4. Ask user favorite color and print message
+
+
+NOTES_SUMMARY:
+
+- print() shows output
+- input() takes user data
+- input() returns string
+- Use int() for whole numbers
+- Use float() for decimals
+- Combine input and print to make interactive programs
+
+DAY: 4
+TITLE: Operators in Python
+
+EXPLANATION:
+
+Operators are special symbols used to perform operations on values and variables.
+
+Example:
+
+a = 10
+b = 5
+
+Python uses operators to calculate, compare, and make decisions.
+
+
+==================================================
+1. ARITHMETIC OPERATORS
+==================================================
+
+Used for mathematical calculations.
+
++   Addition
+-   Subtraction
+*   Multiplication
+/   Division
+%   Modulus (remainder)
+//  Floor Division
+**  Power
+
+Example:
+
+a = 10
+b = 3
+
+print(a + b)    # 13
+print(a - b)    # 7
+print(a * b)    # 30
+print(a / b)    # 3.3333
+print(a % b)    # 1
+print(a // b)   # 3
+print(a ** b)   # 1000
+
+
+Explanation:
+
+10 % 3 = 1
+Because remainder after division is 1
+
+10 // 3 = 3
+Only whole number part
+
+10 ** 3 = 1000
+10 × 10 × 10
+
+
+==================================================
+2. COMPARISON OPERATORS
+==================================================
+
+Used to compare values.
+Result will be True or False.
+
+==   Equal to
+!=   Not equal to
+>    Greater than
+<    Less than
+>=   Greater than or equal to
+<=   Less than or equal to
+
+Example:
+
+x = 10
+y = 20
+
+print(x == y)   # False
+print(x != y)   # True
+print(x < y)    # True
+print(x > y)    # False
+print(x <= y)   # True
+
+
+==================================================
+3. LOGICAL OPERATORS
+==================================================
+
+Used to combine conditions.
+
+and
+or
+not
+
+Example:
+
+age = 20
+
+print(age > 18 and age < 30)   # True
+print(age < 18 or age > 10)    # True
+print(not(age > 18))           # False
+
+
+Explanation:
+
+and = both conditions must be True
+or  = any one condition True
+not = reverse result
+
+
+==================================================
+4. ASSIGNMENT OPERATORS
+==================================================
+
+=    assign value
++=   add and assign
+-=   subtract and assign
+*=   multiply and assign
+/=   divide and assign
+
+Example:
+
+x = 5
+x += 2
+print(x)   # 7
+
+x *= 3
+print(x)   # 21
+
+
+==================================================
+5. OPERATOR PRECEDENCE
+==================================================
+
+Python solves operations like mathematics.
+
+Priority:
+
+1. ()
+2. **
+3. * / // %
+4. + -
+
+Example:
+
+print(2 + 3 * 4)      # 14
+print((2 + 3) * 4)    # 20
+
+
+==================================================
+REAL EXAMPLE
+==================================================
+
+marks = 85
+
+print(marks >= 35)   # True
+
+
+QUIZ:
+
+1. What does % operator return?
+2. What is result of 10 // 3 ?
+3. What is difference between = and == ?
+4. Which logical operator needs both conditions True?
+5. What is 2 ** 3 ?
+
+
+CODING PROBLEM:
+
+Create a program:
+
+Take two numbers from user
+Print:
+
+Addition
+Subtraction
+Multiplication
+Division
+
+
+Example:
+
+a = int(input("Enter first number: "))
+b = int(input("Enter second number: "))
+
+print("Add =", a + b)
+print("Sub =", a - b)
+print("Mul =", a * b)
+print("Div =", a / b)
+
+
+HOMEWORK:
+
+1. Find remainder of 25 divided by 4
+2. Check if 50 is greater than 30
+3. Use and operator with two conditions
+4. Use += on a variable
+5. Practice 10 operator examples
+
+
+NOTES_SUMMARY:
+
+- Operators perform actions on values
+- Arithmetic: + - * / % // **
+- Comparison gives True or False
+- Logical: and, or, not
+- = assigns value, == compares value
+- Use brackets for priority
+
+DAY: 5
+TITLE: Type Casting in Python
+
+EXPLANATION:
+
+Type casting means converting one data type into another data type.
+
+In Python, many times user input comes as STRING, but we may need INTEGER or FLOAT for calculations.
+
+Example:
+
+age = input("Enter age: ")
+
+Even if user types:
+19
+
+Python stores it as:
+
+"19"
+
+This is a string, not a number.
+
+So we use type casting.
+
+
+==================================================
+1. COMMON TYPE CASTING FUNCTIONS
+==================================================
+
+int()     -> Converts to Integer
+float()   -> Converts to Decimal Number
+str()     -> Converts to String
+bool()    -> Converts to Boolean
+
+
+==================================================
+2. CONVERT STRING TO INTEGER
+==================================================
+
+num = "25"
+x = int(num)
+
+print(x)
+print(type(x))
+
+OUTPUT:
+25
+<class 'int'>
+
+
+Useful when taking numeric input:
+
+age = int(input("Enter age: "))
+
+
+==================================================
+3. CONVERT STRING TO FLOAT
+==================================================
+
+price = "99.50"
+p = float(price)
+
+print(p)
+print(type(p))
+
+OUTPUT:
+99.5
+<class 'float'>
+
+
+Useful for decimal values.
+
+
+==================================================
+4. CONVERT NUMBER TO STRING
+==================================================
+
+age = 20
+text = str(age)
+
+print(text)
+print(type(text))
+
+OUTPUT:
+20
+<class 'str'>
+
+
+Useful when joining text:
+
+age = 20
+
+print("Age is " + str(age))
+
+
+==================================================
+5. CONVERT TO BOOLEAN
+==================================================
+
+print(bool(1))        # True
+print(bool(0))        # False
+print(bool("Hello"))  # True
+print(bool(""))       # False
+
+
+Rules:
+
+0, empty string, empty values = False
+Other values = True
+
+
+==================================================
+6. WHY TYPE CASTING IS IMPORTANT
+==================================================
+
+Without int():
+
+a = input("Enter first number: ")
+b = input("Enter second number: ")
+
+print(a + b)
+
+If user enters:
+5
+3
+
+OUTPUT:
+53
+
+Because strings join together.
+
+
+With int():
+
+a = int(input("Enter first number: "))
+b = int(input("Enter second number: "))
+
+print(a + b)
+
+OUTPUT:
+8
+
+
+==================================================
+7. INVALID CONVERSION
+==================================================
+
+x = int("hello")
+
+This gives error because text cannot become integer.
+
+Only numeric strings like:
+
+"10"
+"25"
+"300"
+
+can convert to int.
+
+
+==================================================
+8. MULTIPLE EXAMPLES
+==================================================
+
+marks = "85"
+height = "5.9"
+
+print(int(marks))
+print(float(height))
+print(str(500))
+
+
+QUIZ:
+
+1. What is type casting?
+2. Which function converts to integer?
+3. Which function converts to decimal?
+4. What is result of str(25)?
+5. Why does "5" + "3" give 53?
+
+
+CODING PROBLEM:
+
+Write a program:
+
+Take two numbers from user
+Convert them to int
+Print:
+
+Addition
+Subtraction
+Multiplication
+
+
+Example:
+
+a = int(input("Enter first number: "))
+b = int(input("Enter second number: "))
+
+print("Add =", a + b)
+print("Sub =", a - b)
+print("Mul =", a * b)
+
+
+HOMEWORK:
+
+1. Convert "150" into integer
+2. Convert "45.6" into float
+3. Convert 99 into string
+4. Take age input and convert to int
+5. Create 5 examples using type()
+
+
+NOTES_SUMMARY:
+
+- Type casting changes one data type to another
+- int() -> integer
+- float() -> decimal
+- str() -> string
+- bool() -> True/False
+- Use casting for user input calculations
+
+DAY: 6
+TITLE: Conditional Statements (if, elif, else)
+
+EXPLANATION:
+
+Conditional statements allow a program to make decisions.
+
+A program can check conditions and perform different actions depending on whether the condition is True or False.
+
+Example:
+
+If it is raining:
+    take umbrella
+Else:
+    go normally
+
+In Python, we use:
+
+if
+elif
+else
+
+
+==================================================
+1. BASIC if STATEMENT
+==================================================
+
+Syntax:
+
+if condition:
+    statement
+
+Example:
+
+age = 20
+
+if age >= 18:
+    print("You are eligible to vote")
+
+OUTPUT:
+You are eligible to vote
+
+
+Explanation:
+
+Since age is 20, the condition age >= 18 is True.
+
+
+==================================================
+2. if WITH FALSE CONDITION
+==================================================
+
+age = 15
+
+if age >= 18:
+    print("Eligible")
+
+OUTPUT:
+(no output)
+
+Because condition is False.
+
+
+==================================================
+3. if ... else
+==================================================
+
+Used when there are two possible results.
+
+Syntax:
+
+if condition:
+    statement
+else:
+    statement
+
+Example:
+
+age = 16
+
+if age >= 18:
+    print("Eligible to vote")
+else:
+    print("Not eligible")
+
+OUTPUT:
+Not eligible
+
+
+==================================================
+4. if ... elif ... else
+==================================================
+
+Used for multiple conditions.
+
+Syntax:
+
+if condition1:
+    statement
+elif condition2:
+    statement
+else:
+    statement
+
+Example:
+
+marks = 75
+
+if marks >= 90:
+    print("Grade A+")
+elif marks >= 75:
+    print("Grade A")
+elif marks >= 50:
+    print("Pass")
+else:
+    print("Fail")
+
+OUTPUT:
+Grade A
+
+
+==================================================
+5. INDENTATION IN PYTHON
+==================================================
+
+Python uses spaces (indentation) to define blocks of code.
+
+Correct:
+
+if True:
+    print("Hello")
+
+Wrong:
+
+if True:
+print("Hello")
+
+Indentation is compulsory.
+
+
+==================================================
+6. USING LOGICAL OPERATORS
+==================================================
+
+age = 25
+
+if age >= 18 and age <= 30:
+    print("Young Adult")
+
+OUTPUT:
+Young Adult
+
+
+==================================================
+7. NESTED if
+==================================================
+
+age = 22
+citizen = True
+
+if age >= 18:
+    if citizen:
+        print("Can vote")
+    else:
+        print("Citizen required")
+
+OUTPUT:
+Can vote
+
+
+==================================================
+8. REAL-LIFE EXAMPLES
+==================================================
+
+Password check
+ATM balance check
+Login system
+Exam result
+Weather app
+
+
+==================================================
+9. SIMPLE EVEN / ODD CHECK
+==================================================
+
+num = 8
+
+if num % 2 == 0:
+    print("Even")
+else:
+    print("Odd")
+
+OUTPUT:
+Even
+
+
+QUIZ:
+
+1. Which keyword checks a condition first?
+2. Which keyword is used when condition is False?
+3. Which keyword is used for multiple conditions?
+4. Is indentation important in Python?
+5. What will 10 % 2 return?
+
+
+CODING PROBLEM:
+
+Write a program:
+
+Take a number from user.
+If number is positive print "Positive"
+Else print "Negative or Zero"
+
+Example:
+
+num = int(input("Enter number: "))
+
+if num > 0:
+    print("Positive")
+else:
+    print("Negative or Zero")
+
+
+HOMEWORK:
+
+1. Check if number is even or odd
+2. Check if age is eligible to vote
+3. Create grade checker using marks
+4. Check biggest between two numbers
+5. Practice 10 if-else examples
+
+
+NOTES_SUMMARY:
+
+- if checks condition
+- else runs when condition is False
+- elif checks multiple conditions
+- Indentation is compulsory
+- Conditions use comparison operators
+- Used for decision making in programs
+
+DAY: 7
+TITLE: Nested Conditions and Advanced if-else
+
+EXPLANATION:
+
+In Day 6, you learned basic if, elif, else statements.
+
+Today we learn:
+
+1. Nested if statements
+2. Multiple condition checking
+3. Logical operators with conditions
+4. Real-world decision programs
+
+Nested conditions are conditions inside another condition.
+
+
+==================================================
+1. WHAT IS NESTED if?
+==================================================
+
+Syntax:
+
+if condition1:
+    if condition2:
+        statement
+
+Example:
+
+age = 20
+has_id = True
+
+if age >= 18:
+    if has_id:
+        print("Entry Allowed")
+
+OUTPUT:
+Entry Allowed
+
+
+Explanation:
+
+First condition:
+age >= 18  → True
+
+Second condition:
+has_id → True
+
+So final output prints.
+
+
+==================================================
+2. NESTED if WITH else
+==================================================
+
+age = 16
+has_id = True
+
+if age >= 18:
+    if has_id:
+        print("Entry Allowed")
+    else:
+        print("ID Required")
+else:
+    print("Age Not Allowed")
+
+OUTPUT:
+Age Not Allowed
+
+
+==================================================
+3. USING and OPERATOR
+==================================================
+
+Instead of nested if, we can write:
+
+age = 20
+has_id = True
+
+if age >= 18 and has_id:
+    print("Entry Allowed")
+
+OUTPUT:
+Entry Allowed
+
+
+This is shorter and cleaner.
+
+
+==================================================
+4. USING or OPERATOR
+==================================================
+
+rain = True
+umbrella = False
+
+if rain or umbrella:
+    print("Go Outside Carefully")
+
+OUTPUT:
+Go Outside Carefully
+
+
+If any one condition is True, output runs.
+
+
+==================================================
+5. USING not OPERATOR
+==================================================
+
+logged_in = False
+
+if not logged_in:
+    print("Please Login")
+
+OUTPUT:
+Please Login
+
+
+not reverses True to False or False to True.
+
+
+==================================================
+6. MULTI-CONDITION GRADE CHECKER
+==================================================
+
+marks = 82
+
+if marks >= 90:
+    print("A+")
+elif marks >= 75 and marks < 90:
+    print("A")
+elif marks >= 50:
+    print("Pass")
+else:
+    print("Fail")
+
+OUTPUT:
+A
+
+
+==================================================
+7. BIGGEST OF THREE NUMBERS
+==================================================
+
+a = 10
+b = 25
+c = 18
+
+if a > b and a > c:
+    print("a is biggest")
+elif b > c:
+    print("b is biggest")
+else:
+    print("c is biggest")
+
+OUTPUT:
+b is biggest
+
+
+==================================================
+8. REAL WORLD USES
+==================================================
+
+- Login systems
+- ATM withdrawal checks
+- Scholarship eligibility
+- E-commerce discount system
+- Ticket booking validation
+
+
+QUIZ:
+
+1. What is nested if?
+2. Which operator requires both conditions True?
+3. Which operator works if one condition is True?
+4. What does not True become?
+5. Can nested if contain else?
+
+
+CODING PROBLEM:
+
+Write a program:
+
+Take age and ID status from user.
+
+If age >= 18 and has ID:
+Print "Allowed"
+
+Else:
+Print "Not Allowed"
+
+
+Example:
+
+age = int(input("Enter age: "))
+has_id = input("Have ID (yes/no): ")
+
+if age >= 18 and has_id == "yes":
+    print("Allowed")
+else:
+    print("Not Allowed")
+
+
+HOMEWORK:
+
+1. Check biggest of 3 numbers
+2. Create login check using username/password
+3. Grade checker using marks
+4. Entry check using age and ID
+5. Practice 10 nested if examples
+
+
+NOTES_SUMMARY:
+
+- Nested if means condition inside condition
+- and = both must be True
+- or = one must be True
+- not = reverse result
+- Used in real-world decision making
+- Cleaner code can replace nested if with logical operators
+
+DAY: 8
+TITLE: for Loop in Python
+
+EXPLANATION:
+
+Loops are used to repeat a block of code multiple times.
+
+Instead of writing:
+
+print("Hello")
+print("Hello")
+print("Hello")
+
+We use loops.
+
+Python has two main loops:
+
+1. for loop
+2. while loop
+
+Today we learn for loop.
+
+
+==================================================
+1. WHAT IS for LOOP?
+==================================================
+
+A for loop is used when we know how many times to repeat.
+
+Syntax:
+
+for variable in sequence:
+    statement
+
+
+Example:
+
+for i in range(5):
+    print("Hello")
+
+OUTPUT:
+Hello
+Hello
+Hello
+Hello
+Hello
+
+
+==================================================
+2. range() FUNCTION
+==================================================
+
+range() generates numbers in sequence.
+
+range(5)
+
+Produces:
+
+0, 1, 2, 3, 4
+
+So:
+
+for i in range(5):
+    print(i)
+
+OUTPUT:
+0
+1
+2
+3
+4
+
+
+Important:
+range(5) starts from 0 and stops before 5.
+
+
+==================================================
+3. START AND STOP VALUES
+==================================================
+
+range(start, stop)
+
+Example:
+
+for i in range(1, 6):
+    print(i)
+
+OUTPUT:
+1
+2
+3
+4
+5
+
+
+==================================================
+4. STEP VALUE
+==================================================
+
+range(start, stop, step)
+
+Example:
+
+for i in range(1, 11, 2):
+    print(i)
+
+OUTPUT:
+1
+3
+5
+7
+9
+
+
+==================================================
+5. REVERSE LOOP
+==================================================
+
+for i in range(10, 0, -1):
+    print(i)
+
+OUTPUT:
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+
+
+==================================================
+6. USING LOOP VARIABLE
+==================================================
+
+for i in range(1, 6):
+    print("Number =", i)
+
+OUTPUT:
+Number = 1
+Number = 2
+Number = 3
+Number = 4
+Number = 5
+
+
+==================================================
+7. SUM OF NUMBERS
+==================================================
+
+total = 0
+
+for i in range(1, 6):
+    total = total + i
+
+print(total)
+
+OUTPUT:
+15
+
+
+Because:
+1 + 2 + 3 + 4 + 5 = 15
+
+
+==================================================
+8. LOOP THROUGH STRING
+==================================================
+
+name = "Python"
+
+for ch in name:
+    print(ch)
+
+OUTPUT:
+P
+y
+t
+h
+o
+n
+
+
+==================================================
+9. REAL WORLD USES
+==================================================
+
+- Print tables
+- Repeat menu options
+- Process lists
+- Count values
+- Generate reports
+
+
+QUIZ:
+
+1. Which loop is used when repetitions are known?
+2. What does range(5) produce first?
+3. Does range(5) include 5?
+4. Which value gives reverse loop step?
+5. Can for loop work on strings?
+
+
+CODING PROBLEM:
+
+Write a program to print numbers from 1 to 10 using for loop.
+
+Example:
+
+for i in range(1, 11):
+    print(i)
+
+
+HOMEWORK:
+
+1. Print even numbers from 2 to 20
+2. Print odd numbers from 1 to 15
+3. Find sum of 1 to 100
+4. Print your name 5 times
+5. Reverse print 10 to 1
+
+
+NOTES_SUMMARY:
+
+- for loop repeats code
+- range() creates sequence
+- range(5) = 0 to 4
+- range(start, stop, step)
+- Use negative step for reverse
+- for loop can iterate numbers and strings
+
+DAY: 9
+TITLE: while Loop in Python
+
+EXPLANATION:
+
+A while loop is used to repeat a block of code as long as a condition is True.
+
+Unlike a for loop, while loop is useful when we do NOT know exactly how many times to repeat.
+
+Example:
+
+Keep asking password until correct.
+Keep running game until user quits.
+Count until a condition changes.
+
+
+==================================================
+1. BASIC while LOOP
+==================================================
+
+Syntax:
+
+while condition:
+    statement
+
+
+Example:
+
+i = 1
+
+while i <= 5:
+    print(i)
+    i = i + 1
+
+OUTPUT:
+1
+2
+3
+4
+5
+
+
+Explanation:
+
+- Start with i = 1
+- Check i <= 5
+- Print i
+- Increase i by 1
+- Repeat until condition becomes False
+
+
+==================================================
+2. IMPORTANCE OF UPDATING VARIABLE
+==================================================
+
+i = 1
+
+while i <= 3:
+    print(i)
+    i = i + 1
+
+If you forget:
+
+i = i + 1
+
+Then loop runs forever (infinite loop).
+
+
+==================================================
+3. INFINITE LOOP
+==================================================
+
+while True:
+    print("Running")
+
+This keeps running until manually stopped.
+
+
+==================================================
+4. COUNTDOWN PROGRAM
+==================================================
+
+n = 5
+
+while n > 0:
+    print(n)
+    n = n - 1
+
+print("Done!")
+
+OUTPUT:
+5
+4
+3
+2
+1
+Done!
+
+
+==================================================
+5. SUM OF NUMBERS
+==================================================
+
+i = 1
+total = 0
+
+while i <= 5:
+    total = total + i
+    i = i + 1
+
+print(total)
+
+OUTPUT:
+15
+
+
+==================================================
+6. USER INPUT LOOP
+==================================================
+
+password = ""
+
+while password != "python123":
+    password = input("Enter password: ")
+
+print("Access Granted")
+
+
+This repeats until correct password is entered.
+
+
+==================================================
+7. while WITH else
+==================================================
+
+i = 1
+
+while i <= 3:
+    print(i)
+    i += 1
+else:
+    print("Loop Finished")
+
+OUTPUT:
+1
+2
+3
+Loop Finished
+
+
+==================================================
+8. for LOOP vs while LOOP
+==================================================
+
+for loop:
+Use when repetitions are known.
+
+while loop:
+Use when condition controls repetition.
+
+
+==================================================
+9. REAL WORLD USES
+==================================================
+
+- Login attempts
+- ATM menu
+- Game loops
+- Sensor monitoring
+- Repeating until valid input
+
+
+QUIZ:
+
+1. Which loop runs while condition is True?
+2. What happens if variable is not updated?
+3. Which loop is better when count is unknown?
+4. Can while loop become infinite?
+5. What does while True mean?
+
+
+CODING PROBLEM:
+
+Write a program to print numbers from 1 to 10 using while loop.
+
+Example:
+
+i = 1
+
+while i <= 10:
+    print(i)
+    i += 1
+
+
+HOMEWORK:
+
+1. Print even numbers from 2 to 20 using while
+2. Find sum of 1 to 50
+3. Countdown from 10 to 1
+4. Ask user until they enter yes
+5. Practice 5 while loop examples
+
+
+NOTES_SUMMARY:
+
+- while loop repeats while condition is True
+- Must update variable inside loop
+- Forgetting update may cause infinite loop
+- Good for unknown repetitions
+- Useful for input-based programs
+
+DAY: 10
+TITLE: break, continue and pass in Python
+
+EXPLANATION:
+
+Sometimes inside loops, we need more control.
+
+Python provides:
+
+1. break     -> Stop the loop immediately
+2. continue  -> Skip current iteration and move to next
+3. pass      -> Do nothing temporarily
+
+These are called loop control statements.
+
+
+==================================================
+1. break STATEMENT
+==================================================
+
+Used to exit the loop immediately.
+
+Example:
+
+for i in range(1, 6):
+    if i == 4:
+        break
+    print(i)
+
+OUTPUT:
+1
+2
+3
+
+
+Explanation:
+
+When i becomes 4:
+break stops the loop.
+
+
+==================================================
+2. break IN while LOOP
+==================================================
+
+i = 1
+
+while True:
+    print(i)
+    if i == 3:
+        break
+    i += 1
+
+OUTPUT:
+1
+2
+3
+
+
+==================================================
+3. continue STATEMENT
+==================================================
+
+Used to skip current iteration and continue next loop cycle.
+
+Example:
+
+for i in range(1, 6):
+    if i == 3:
+        continue
+    print(i)
+
+OUTPUT:
+1
+2
+4
+5
+
+
+Explanation:
+
+When i = 3, print is skipped.
+
+
+==================================================
+4. continue WITH EVEN NUMBERS
+==================================================
+
+for i in range(1, 11):
+    if i % 2 != 0:
+        continue
+    print(i)
+
+OUTPUT:
+2
+4
+6
+8
+10
+
+
+==================================================
+5. pass STATEMENT
+==================================================
+
+pass means do nothing.
+
+Useful when writing incomplete code.
+
+Example:
+
+for i in range(5):
+    if i == 3:
+        pass
+    print(i)
+
+OUTPUT:
+0
+1
+2
+3
+4
+
+
+Another Example:
+
+if True:
+    pass
+
+No error occurs.
+
+
+==================================================
+6. break vs continue
+==================================================
+
+break:
+Stops whole loop
+
+continue:
+Skips only one turn
+
+Example:
+
+for i in range(5):
+    if i == 2:
+        continue
+    if i == 4:
+        break
+    print(i)
+
+OUTPUT:
+0
+1
+3
+
+
+==================================================
+7. PASSWORD CHECK USING break
+==================================================
+
+while True:
+    pwd = input("Enter password: ")
+
+    if pwd == "python":
+        print("Correct")
+        break
+    else:
+        print("Try Again")
+
+
+==================================================
+8. REAL WORLD USES
+==================================================
+
+- Stop search when item found
+- Skip invalid data
+- Exit menu loops
+- Placeholder for future code
+- Login retry systems
+
+
+QUIZ:
+
+1. Which statement stops loop completely?
+2. Which statement skips current iteration?
+3. Which statement does nothing?
+4. Can break be used in while loop?
+5. Does continue stop entire loop?
+
+
+CODING PROBLEM:
+
+Write a program:
+
+Print numbers 1 to 10
+Skip number 5 using continue
+
+Example:
+
+for i in range(1, 11):
+    if i == 5:
+        continue
+    print(i)
+
+
+HOMEWORK:
+
+1. Print 1 to 20 and stop at 12 using break
+2. Print even numbers 1 to 20 using continue
+3. Create password loop using break
+4. Use pass inside if block
+5. Practice 10 examples
+
+
+NOTES_SUMMARY:
+
+- break stops loop fully
+- continue skips one iteration
+- pass does nothing
+- Useful for loop control
+- Common in menus, login, filtering data
+
+DAY: 11
+TITLE: Functions in Python
+
+EXPLANATION:
+
+A function is a reusable block of code that performs a specific task.
+
+Instead of writing the same code again and again, we create a function once and call it whenever needed.
+
+Examples of functions:
+
+print()
+input()
+len()
+
+These are built-in functions.
+
+You can also create your own functions.
+
+
+==================================================
+1. WHY FUNCTIONS ARE IMPORTANT
+==================================================
+
+Without function:
+
+print("Welcome")
+print("Welcome")
+print("Welcome")
+
+With function:
+
+def greet():
+    print("Welcome")
+
+greet()
+greet()
+greet()
+
+Same result, cleaner code.
+
+
+==================================================
+2. CREATING A FUNCTION
+==================================================
+
+Syntax:
+
+def function_name():
+    statements
+
+Example:
+
+def hello():
+    print("Hello Python")
+
+hello()
+
+OUTPUT:
+Hello Python
+
+
+Explanation:
+
+def creates function
+hello is function name
+() used to call function
+
+
+==================================================
+3. CALLING FUNCTION MULTIPLE TIMES
+==================================================
+
+def greet():
+    print("Good Morning")
+
+greet()
+greet()
+greet()
+
+OUTPUT:
+Good Morning
+Good Morning
+Good Morning
+
+
+==================================================
+4. FUNCTION WITH PARAMETERS
+==================================================
+
+Parameters allow passing values into function.
+
+Example:
+
+def greet(name):
+    print("Hello", name)
+
+greet("Alex")
+greet("Sathish")
+
+OUTPUT:
+Hello Alex
+Hello Sathish
+
+
+name is parameter.
+
+
+==================================================
+5. MULTIPLE PARAMETERS
+==================================================
+
+def add(a, b):
+    print(a + b)
+
+add(5, 3)
+add(10, 2)
+
+OUTPUT:
+8
+12
+
+
+==================================================
+6. RETURN VALUE
+==================================================
+
+Functions can send result back using return.
+
+Example:
+
+def square(n):
+    return n * n
+
+x = square(4)
+print(x)
+
+OUTPUT:
+16
+
+
+Difference:
+
+print() shows output
+return gives result back
+
+
+==================================================
+7. DEFAULT PARAMETERS
+==================================================
+
+def greet(name="Guest"):
+    print("Hello", name)
+
+greet()
+greet("John")
+
+OUTPUT:
+Hello Guest
+Hello John
+
+
+==================================================
+8. LOCAL VARIABLES
+==================================================
+
+def test():
+    x = 10
+    print(x)
+
+test()
+
+x exists only inside function.
+
+
+==================================================
+9. REAL WORLD USES
+==================================================
+
+- Calculator operations
+- Login checking
+- Reusable menus
+- Data processing
+- Clean large programs
+
+
+QUIZ:
+
+1. What keyword creates a function?
+2. What is used to call a function?
+3. What does return do?
+4. What is parameter?
+5. Can a function be called many times?
+
+
+CODING PROBLEM:
+
+Create a function named show_name()
+that prints your name.
+
+Example:
+
+def show_name():
+    print("Sathish")
+
+show_name()
+
+
+HOMEWORK:
+
+1. Create function to print Hello
+2. Create function add(a,b)
+3. Create function square(n)
+4. Create function with default parameter
+5. Call each function 3 times
+
+
+NOTES_SUMMARY:
+
+- Function = reusable block of code
+- Use def to create function
+- Use () to call function
+- Parameters accept values
+- return sends result back
+- Functions make code clean and reusable
+
+DAY: 12
+TITLE: Function Arguments, Return Values and Scope
+
+EXPLANATION:
+
+In Day 11, you learned basic functions.
+
+Today we learn:
+
+1. Different types of arguments
+2. Return values in detail
+3. Local and global scope
+4. Reusing functions efficiently
+
+Functions become powerful when they accept inputs and return outputs.
+
+
+==================================================
+1. POSITIONAL ARGUMENTS
+==================================================
+
+Values are passed in order.
+
+Example:
+
+def student(name, age):
+    print(name, age)
+
+student("Alex", 20)
+
+OUTPUT:
+Alex 20
+
+
+Important:
+
+First value goes to name
+Second value goes to age
+
+
+==================================================
+2. KEYWORD ARGUMENTS
+==================================================
+
+We can specify parameter names.
+
+Example:
+
+def student(name, age):
+    print(name, age)
+
+student(age=19, name="Sathish")
+
+OUTPUT:
+Sathish 19
+
+
+Order does not matter when using keywords.
+
+
+==================================================
+3. DEFAULT ARGUMENTS
+==================================================
+
+If value not given, default is used.
+
+Example:
+
+def country(name="India"):
+    print(name)
+
+country()
+country("Japan")
+
+OUTPUT:
+India
+Japan
+
+
+==================================================
+4. RETURN VALUE IN DETAIL
+==================================================
+
+return sends result back to caller.
+
+Example:
+
+def add(a, b):
+    return a + b
+
+result = add(5, 7)
+print(result)
+
+OUTPUT:
+12
+
+
+You can store returned result in variable.
+
+
+==================================================
+5. MULTIPLE RETURNS
+==================================================
+
+def calc(a, b):
+    return a+b, a-b
+
+x, y = calc(10, 3)
+
+print(x)
+print(y)
+
+OUTPUT:
+13
+7
+
+
+==================================================
+6. LOCAL VARIABLE
+==================================================
+
+def test():
+    x = 50
+    print(x)
+
+test()
+
+OUTPUT:
+50
+
+x exists only inside function.
+
+
+==================================================
+7. GLOBAL VARIABLE
+==================================================
+
+x = 100
+
+def show():
+    print(x)
+
+show()
+
+OUTPUT:
+100
+
+
+Global variable is created outside function.
+
+
+==================================================
+8. LOCAL vs GLOBAL
+==================================================
+
+x = 10
+
+def demo():
+    x = 20
+    print("Inside:", x)
+
+demo()
+print("Outside:", x)
+
+OUTPUT:
+Inside: 20
+Outside: 10
+
+
+Local variable inside function does not change global one.
+
+
+==================================================
+9. REAL WORLD USES
+==================================================
+
+- Billing functions
+- Login validation
+- Student result calculators
+- Reusable utility functions
+- Clean modular programs
+
+
+QUIZ:
+
+1. Which argument depends on order?
+2. Which argument uses parameter names?
+3. What does return do?
+4. Where is local variable available?
+5. Is global variable created inside or outside function?
+
+
+CODING PROBLEM:
+
+Create a function multiply(a, b)
+Return multiplication result
+Print the result
+
+Example:
+
+def multiply(a, b):
+    return a * b
+
+print(multiply(4, 5))
+
+
+HOMEWORK:
+
+1. Create add(a,b) using return
+2. Create function with default city="Chennai"
+3. Use keyword arguments in one function
+4. Create local variable example
+5. Create global variable example
+
+
+NOTES_SUMMARY:
+
+- Positional arguments use order
+- Keyword arguments use names
+- Default arguments give preset values
+- return sends value back
+- Local variables exist inside function
+- Global variables exist outside function
+
+DAY: 13
+TITLE: Strings in Python
+
+EXPLANATION:
+
+A string is a sequence of characters used to store text.
+
+Examples:
+
+"Hello"
+"Python"
+"Sathish"
+"123"   ← still text because inside quotes
+
+Strings are one of the most used data types in Python.
+
+
+==================================================
+1. CREATING STRINGS
+==================================================
+
+Use single quotes or double quotes.
+
+name = "Alex"
+city = 'Chennai'
+
+print(name)
+print(city)
+
+OUTPUT:
+Alex
+Chennai
+
+
+==================================================
+2. MULTILINE STRING
+==================================================
+
+Use triple quotes.
+
+msg = '''Welcome
+to
+Python'''
+
+print(msg)
+
+OUTPUT:
+Welcome
+to
+Python
+
+
+==================================================
+3. ACCESS CHARACTERS (INDEXING)
+==================================================
+
+Each character has a position index.
+
+word = "Python"
+
+Positions:
+
+P  y  t  h  o  n
+0  1  2  3  4  5
+
+Example:
+
+word = "Python"
+
+print(word[0])   # P
+print(word[1])   # y
+print(word[5])   # n
+
+
+Negative indexing:
+
+print(word[-1])  # n
+print(word[-2])  # o
+
+
+==================================================
+4. STRING LENGTH
+==================================================
+
+Use len()
+
+text = "Python"
+
+print(len(text))
+
+OUTPUT:
+6
+
+
+==================================================
+5. STRING CONCATENATION
+==================================================
+
+Joining strings using +
+
+first = "Hello"
+second = "World"
+
+print(first + " " + second)
+
+OUTPUT:
+Hello World
+
+
+==================================================
+6. REPETITION
+==================================================
+
+print("Hi " * 3)
+
+OUTPUT:
+Hi Hi Hi
+
+
+==================================================
+7. MEMBERSHIP
+==================================================
+
+Check text inside string.
+
+name = "Python"
+
+print("Py" in name)      # True
+print("Java" in name)    # False
+
+
+==================================================
+8. LOOP THROUGH STRING
+==================================================
+
+for ch in "Code":
+    print(ch)
+
+OUTPUT:
+C
+o
+d
+e
+
+
+==================================================
+9. COMMON STRING METHODS
+==================================================
+
+text = "python programming"
+
+print(text.upper())      # PYTHON PROGRAMMING
+print(text.lower())      # python programming
+print(text.title())      # Python Programming
+print(text.capitalize()) # Python programming
+
+
+==================================================
+10. REMOVE SPACES
+==================================================
+
+name = "  Alex  "
+
+print(name.strip())
+
+OUTPUT:
+Alex
+
+
+==================================================
+11. REPLACE TEXT
+==================================================
+
+msg = "I like Java"
+
+print(msg.replace("Java", "Python"))
+
+OUTPUT:
+I like Python
+
+
+==================================================
+12. SPLIT STRING
+==================================================
+
+data = "apple,banana,mango"
+
+print(data.split(","))
+
+OUTPUT:
+['apple', 'banana', 'mango']
+
+
+==================================================
+13. REAL WORLD USES
+==================================================
+
+- User names
+- Password systems
+- Search text
+- Chat applications
+- Form data processing
+
+
+QUIZ:
+
+1. What is a string?
+2. What is index of first character?
+3. What does len() do?
+4. Which operator joins strings?
+5. What does upper() do?
+
+
+CODING PROBLEM:
+
+Take user name as input
+Print:
+
+Original name
+Uppercase name
+Length of name
+
+Example:
+
+name = input("Enter name: ")
+
+print(name)
+print(name.upper())
+print(len(name))
+
+
+HOMEWORK:
+
+1. Print first and last letter of your name
+2. Join first name + last name
+3. Convert sentence to uppercase
+4. Replace one word in sentence
+5. Split fruits string by comma
+
+
+NOTES_SUMMARY:
+
+- String stores text
+- Index starts at 0
+- len() gives length
+- + joins strings
+- Methods: upper(), lower(), strip(), replace(), split()
+- Strings are heavily used in real programs
+
+DAY: 14
+TITLE: String Slicing and String Methods
+
+EXPLANATION:
+
+In Day 13, you learned basics of strings.
+
+Today we learn:
+
+1. String slicing
+2. Advanced string methods
+3. Searching text
+4. Formatting strings
+
+Strings become very powerful when we can extract parts of text.
+
+
+==================================================
+1. WHAT IS STRING SLICING?
+==================================================
+
+Slicing means taking a part of a string.
+
+Syntax:
+
+string[start:end]
+
+Important:
+- start included
+- end excluded
+
+Example:
+
+text = "Python"
+
+print(text[0:2])
+
+OUTPUT:
+Py
+
+
+Because:
+Index 0 = P
+Index 1 = y
+
+
+==================================================
+2. MORE SLICING EXAMPLES
+==================================================
+
+text = "Python"
+
+print(text[0:4])   # Pyth
+print(text[2:6])   # thon
+print(text[:3])    # Pyt
+print(text[3:])    # hon
+
+If start missing = begins from start
+If end missing = goes till end
+
+
+==================================================
+3. NEGATIVE SLICING
+==================================================
+
+text = "Python"
+
+print(text[-3:])   # hon
+print(text[:-1])   # Pytho
+
+
+==================================================
+4. STEP SLICING
+==================================================
+
+text = "Python"
+
+print(text[::2])
+
+OUTPUT:
+Pto
+
+Explanation:
+Take every 2nd character.
+
+
+Reverse string:
+
+print(text[::-1])
+
+OUTPUT:
+nohtyP
+
+
+==================================================
+5. FIND METHOD
+==================================================
+
+Find returns index of first match.
+
+text = "Python Programming"
+
+print(text.find("Pro"))
+
+OUTPUT:
+7
+
+If not found:
+
+print(text.find("Java"))
+
+OUTPUT:
+-1
+
+
+==================================================
+6. COUNT METHOD
+==================================================
+
+text = "banana"
+
+print(text.count("a"))
+
+OUTPUT:
+3
+
+
+==================================================
+7. STARTSWITH / ENDSWITH
+==================================================
+
+file = "report.pdf"
+
+print(file.startswith("rep"))   # True
+print(file.endswith(".pdf"))    # True
+
+
+==================================================
+8. IS METHODS
+==================================================
+
+print("123".isdigit())     # True
+print("hello".isalpha())   # True
+print("abc123".isalnum())  # True
+print("Python".istitle())  # True
+
+
+==================================================
+9. STRING FORMATTING
+==================================================
+
+name = "Alex"
+age = 20
+
+print("My name is", name, "and age is", age)
+
+Using f-string (best method):
+
+print(f"My name is {name} and age is {age}")
+
+OUTPUT:
+My name is Alex and age is 20
+
+
+==================================================
+10. REAL WORLD USES
+==================================================
+
+- Email validation
+- File extension checking
+- Password rules
+- Search boxes
+- Report generation
+
+
+QUIZ:
+
+1. What is slicing?
+2. Is end index included in slicing?
+3. What does [::-1] do?
+4. What does find() return if not found?
+5. Which method checks ending text?
+
+
+CODING PROBLEM:
+
+Take a name from user and print:
+
+First 3 letters
+Last 3 letters
+Reversed name
+
+Example:
+
+name = input("Enter name: ")
+
+print(name[:3])
+print(name[-3:])
+print(name[::-1])
+
+
+HOMEWORK:
+
+1. Slice first 5 letters of Python Programming
+2. Count letter a in banana
+3. Check if file ends with .txt
+4. Reverse your city name
+5. Use f-string with your details
+
+
+NOTES_SUMMARY:
+
+- Slicing extracts part of string
+- start included, end excluded
+- [::-1] reverses string
+- find() returns index or -1
+- count() counts matches
+- startswith()/endswith() useful for validation
+- f-string is modern formatting method
+
+DAY: 15
+TITLE: Lists in Python
+
+EXPLANATION:
+
+A list is a collection used to store multiple values in a single variable.
+
+Example:
+
+marks = [85, 90, 78, 92]
+
+Instead of creating many variables:
+
+m1 = 85
+m2 = 90
+m3 = 78
+
+We use one list.
+
+Lists are one of the most powerful and commonly used data types in Python.
+
+
+==================================================
+1. CREATING A LIST
+==================================================
+
+numbers = [10, 20, 30, 40]
+
+print(numbers)
+
+OUTPUT:
+[10, 20, 30, 40]
+
+
+Lists use square brackets [ ]
+
+
+==================================================
+2. LIST CAN STORE MIXED DATA TYPES
+==================================================
+
+data = ["Alex", 20, 5.8, True]
+
+print(data)
+
+OUTPUT:
+['Alex', 20, 5.8, True]
+
+
+==================================================
+3. ACCESS ITEMS (INDEXING)
+==================================================
+
+fruits = ["Apple", "Banana", "Mango"]
+
+print(fruits[0])   # Apple
+print(fruits[1])   # Banana
+print(fruits[2])   # Mango
+
+Negative indexing:
+
+print(fruits[-1])  # Mango
+
+
+==================================================
+4. LIST SLICING
+==================================================
+
+nums = [10, 20, 30, 40, 50]
+
+print(nums[1:4])
+
+OUTPUT:
+[20, 30, 40]
+
+
+==================================================
+5. CHANGE LIST ITEM
+==================================================
+
+fruits = ["Apple", "Banana", "Mango"]
+
+fruits[1] = "Orange"
+
+print(fruits)
+
+OUTPUT:
+['Apple', 'Orange', 'Mango']
+
+
+Lists are mutable (changeable).
+
+
+==================================================
+6. ADD ITEMS
+==================================================
+
+fruits = ["Apple", "Banana"]
+
+fruits.append("Mango")
+
+print(fruits)
+
+OUTPUT:
+['Apple', 'Banana', 'Mango']
+
+
+Insert at specific position:
+
+fruits.insert(1, "Orange")
+
+print(fruits)
+
+
+==================================================
+7. REMOVE ITEMS
+==================================================
+
+fruits = ["Apple", "Banana", "Mango"]
+
+fruits.remove("Banana")
+
+print(fruits)
+
+OUTPUT:
+['Apple', 'Mango']
+
+
+Remove last item:
+
+fruits.pop()
+
+Clear all:
+
+fruits.clear()
+
+
+==================================================
+8. LIST LENGTH
+==================================================
+
+nums = [1, 2, 3, 4]
+
+print(len(nums))
+
+OUTPUT:
+4
+
+
+==================================================
+9. LOOP THROUGH LIST
+==================================================
+
+fruits = ["Apple", "Banana", "Mango"]
+
+for item in fruits:
+    print(item)
+
+OUTPUT:
+Apple
+Banana
+Mango
+
+
+==================================================
+10. CHECK ITEM EXISTS
+==================================================
+
+fruits = ["Apple", "Banana"]
+
+print("Apple" in fruits)   # True
+print("Mango" in fruits)   # False
+
+
+==================================================
+11. SORT LIST
+==================================================
+
+nums = [5, 2, 9, 1]
+
+nums.sort()
+
+print(nums)
+
+OUTPUT:
+[1, 2, 5, 9]
+
+
+Reverse sort:
+
+nums.sort(reverse=True)
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- Student marks
+- Product lists
+- To-do tasks
+- Menu items
+- Database results
+
+
+QUIZ:
+
+1. Which brackets are used for lists?
+2. Does index start from 0?
+3. Which method adds item at end?
+4. Are lists mutable?
+5. What does len(list) return?
+
+
+CODING PROBLEM:
+
+Create a list of 5 favorite movies.
+Print:
+
+First movie
+Last movie
+Total number of movies
+
+Example:
+
+movies = ["A", "B", "C", "D", "E"]
+
+print(movies[0])
+print(movies[-1])
+print(len(movies))
+
+
+HOMEWORK:
+
+1. Create list of 5 numbers
+2. Add one new number using append()
+3. Remove one item
+4. Sort the list
+5. Print all items using loop
+
+
+NOTES_SUMMARY:
+
+- List stores multiple values
+- Uses [ ]
+- Index starts at 0
+- Lists are mutable
+- append(), insert(), remove(), pop()
+- len() gives total items
+- Lists are very important in Python
+
+DAY: 16
+TITLE: Advanced Lists and List Methods
+
+EXPLANATION:
+
+In Day 15, you learned list basics.
+
+Today we learn:
+
+1. More list methods
+2. Copying lists
+3. Nested lists
+4. List comprehensions
+5. Useful list operations
+
+Lists are extremely important in real Python programs.
+
+
+==================================================
+1. REVIEW OF LIST
+==================================================
+
+numbers = [10, 20, 30]
+
+A list stores multiple values in one variable.
+
+
+==================================================
+2. EXTEND LIST
+==================================================
+
+Used to add multiple items.
+
+a = [1, 2]
+b = [3, 4]
+
+a.extend(b)
+
+print(a)
+
+OUTPUT:
+[1, 2, 3, 4]
+
+
+==================================================
+3. CONCATENATE LISTS
+==================================================
+
+x = [1, 2]
+y = [3, 4]
+
+z = x + y
+
+print(z)
+
+OUTPUT:
+[1, 2, 3, 4]
+
+
+==================================================
+4. COUNT METHOD
+==================================================
+
+nums = [1, 2, 2, 3, 2]
+
+print(nums.count(2))
+
+OUTPUT:
+3
+
+
+==================================================
+5. INDEX METHOD
+==================================================
+
+fruits = ["Apple", "Banana", "Mango"]
+
+print(fruits.index("Banana"))
+
+OUTPUT:
+1
+
+
+==================================================
+6. REVERSE METHOD
+==================================================
+
+nums = [1, 2, 3, 4]
+
+nums.reverse()
+
+print(nums)
+
+OUTPUT:
+[4, 3, 2, 1]
+
+
+==================================================
+7. COPY LIST
+==================================================
+
+a = [10, 20, 30]
+b = a.copy()
+
+print(b)
+
+OUTPUT:
+[10, 20, 30]
+
+
+Why important:
+
+If we do:
+
+b = a
+
+Then both point to same list.
+
+
+==================================================
+8. NESTED LIST
+==================================================
+
+matrix = [
+    [1, 2],
+    [3, 4]
+]
+
+print(matrix[0])      # [1, 2]
+print(matrix[0][1])   # 2
+
+
+Used in tables, grids, matrices.
+
+
+==================================================
+9. LOOP WITH INDEX
+==================================================
+
+fruits = ["Apple", "Banana", "Mango"]
+
+for i in range(len(fruits)):
+    print(i, fruits[i])
+
+OUTPUT:
+0 Apple
+1 Banana
+2 Mango
+
+
+==================================================
+10. LIST COMPREHENSION
+==================================================
+
+Short way to create lists.
+
+nums = [x for x in range(5)]
+
+print(nums)
+
+OUTPUT:
+[0, 1, 2, 3, 4]
+
+
+Squares:
+
+sq = [x*x for x in range(1, 6)]
+
+print(sq)
+
+OUTPUT:
+[1, 4, 9, 16, 25]
+
+
+Even numbers:
+
+even = [x for x in range(1, 11) if x % 2 == 0]
+
+print(even)
+
+OUTPUT:
+[2, 4, 6, 8, 10]
+
+
+==================================================
+11. MIN, MAX, SUM
+==================================================
+
+nums = [5, 2, 9, 1]
+
+print(min(nums))   # 1
+print(max(nums))   # 9
+print(sum(nums))   # 17
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- Student marks analysis
+- Shopping cart items
+- Matrix calculations
+- Data filtering
+- Reports generation
+
+
+QUIZ:
+
+1. Which method adds another list items?
+2. What does count() do?
+3. Which method copies list?
+4. What is nested list?
+5. What does sum(list) return?
+
+
+CODING PROBLEM:
+
+Create a list of numbers 1 to 10 using list comprehension.
+Then print only even numbers.
+
+Example:
+
+nums = [x for x in range(1, 11)]
+for n in nums:
+    if n % 2 == 0:
+        print(n)
+
+
+HOMEWORK:
+
+1. Create square list from 1 to 10
+2. Reverse a list
+3. Find max of list
+4. Create 2x2 nested list
+5. Practice 5 list comprehensions
+
+
+NOTES_SUMMARY:
+
+- extend() adds many items
+- count() counts values
+- index() finds position
+- reverse() reverses list
+- copy() duplicates list
+- Nested list = list inside list
+- List comprehension = short powerful syntax
+- min(), max(), sum() are useful functions
+
+DAY: 17
+TITLE: Tuples in Python
+
+EXPLANATION:
+
+A tuple is a collection used to store multiple values in a single variable.
+
+Tuple is similar to a list, but there is one major difference:
+
+LIST   = Mutable (can change)
+TUPLE  = Immutable (cannot change)
+
+Example:
+
+colors = ("Red", "Green", "Blue")
+
+Tuples are faster and safer when data should not change.
+
+
+==================================================
+1. CREATING A TUPLE
+==================================================
+
+fruits = ("Apple", "Banana", "Mango")
+
+print(fruits)
+
+OUTPUT:
+('Apple', 'Banana', 'Mango')
+
+
+Tuples use round brackets ( )
+
+
+==================================================
+2. SINGLE ITEM TUPLE
+==================================================
+
+t = ("Python",)
+
+print(type(t))
+
+OUTPUT:
+<class 'tuple'>
+
+
+Important:
+
+Without comma:
+
+t = ("Python")
+
+This becomes string.
+
+
+==================================================
+3. ACCESS ITEMS (INDEXING)
+==================================================
+
+nums = (10, 20, 30, 40)
+
+print(nums[0])   # 10
+print(nums[2])   # 30
+print(nums[-1])  # 40
+
+
+==================================================
+4. SLICING TUPLE
+==================================================
+
+nums = (10, 20, 30, 40, 50)
+
+print(nums[1:4])
+
+OUTPUT:
+(20, 30, 40)
+
+
+==================================================
+5. IMMUTABLE NATURE
+==================================================
+
+colors = ("Red", "Green", "Blue")
+
+colors[1] = "Yellow"
+
+OUTPUT:
+Error
+
+Because tuple values cannot be changed.
+
+
+==================================================
+6. LOOP THROUGH TUPLE
+==================================================
+
+fruits = ("Apple", "Banana", "Mango")
+
+for item in fruits:
+    print(item)
+
+OUTPUT:
+Apple
+Banana
+Mango
+
+
+==================================================
+7. LENGTH OF TUPLE
+==================================================
+
+nums = (1, 2, 3, 4)
+
+print(len(nums))
+
+OUTPUT:
+4
+
+
+==================================================
+8. COUNT AND INDEX
+==================================================
+
+nums = (1, 2, 2, 3, 2)
+
+print(nums.count(2))   # 3
+print(nums.index(3))   # 3
+
+
+==================================================
+9. PACKING AND UNPACKING
+==================================================
+
+Packing:
+
+person = ("Alex", 20, "Chennai")
+
+Unpacking:
+
+name, age, city = person
+
+print(name)
+print(age)
+print(city)
+
+OUTPUT:
+Alex
+20
+Chennai
+
+
+==================================================
+10. CONVERT BETWEEN LIST AND TUPLE
+==================================================
+
+t = (1, 2, 3)
+
+lst = list(t)
+print(lst)
+
+lst.append(4)
+
+t2 = tuple(lst)
+print(t2)
+
+OUTPUT:
+[1, 2, 3]
+(1, 2, 3, 4)
+
+
+==================================================
+11. WHY USE TUPLES?
+==================================================
+
+- Fixed data
+- Coordinates
+- Student records
+- Database rows
+- Faster than lists
+- Safe from accidental changes
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+location = (13.0827, 80.2707)
+rgb = (255, 0, 0)
+student = ("Sathish", 19, "Python")
+
+
+QUIZ:
+
+1. Which bracket is used for tuple?
+2. Can tuple items be changed?
+3. Which method counts values?
+4. What is needed for one-item tuple?
+5. Is tuple faster than list?
+
+
+CODING PROBLEM:
+
+Create a tuple with 5 numbers.
+Print:
+
+First number
+Last number
+Length of tuple
+
+Example:
+
+nums = (10, 20, 30, 40, 50)
+
+print(nums[0])
+print(nums[-1])
+print(len(nums))
+
+
+HOMEWORK:
+
+1. Create tuple of 5 cities
+2. Print second city
+3. Count repeated value in tuple
+4. Unpack a tuple into 3 variables
+5. Convert tuple to list and add item
+
+
+NOTES_SUMMARY:
+
+- Tuple stores multiple values
+- Uses ( )
+- Immutable = cannot change
+- Supports indexing and slicing
+- count() and index() available
+- Good for fixed and secure data
+
+DAY: 18
+TITLE: Sets in Python
+
+EXPLANATION:
+
+A set is a collection used to store multiple unique values.
+
+Important features of sets:
+
+1. No duplicate values
+2. Unordered collection
+3. Mutable (can add/remove items)
+4. Fast membership checking
+
+Example:
+
+nums = {1, 2, 3, 4}
+
+Sets are useful when duplicate data must be removed.
+
+
+==================================================
+1. CREATING A SET
+==================================================
+
+fruits = {"Apple", "Banana", "Mango"}
+
+print(fruits)
+
+OUTPUT:
+{'Apple', 'Banana', 'Mango'}
+
+
+Sets use curly brackets { }
+
+
+==================================================
+2. DUPLICATES ARE REMOVED
+==================================================
+
+nums = {1, 2, 2, 3, 3, 4}
+
+print(nums)
+
+OUTPUT:
+{1, 2, 3, 4}
+
+
+Duplicate values are automatically removed.
+
+
+==================================================
+3. UNORDERED NATURE
+==================================================
+
+colors = {"Red", "Green", "Blue"}
+
+print(colors)
+
+Output order may change.
+
+Because sets do not maintain index order.
+
+
+==================================================
+4. ACCESSING ITEMS
+==================================================
+
+Sets do NOT support indexing.
+
+nums = {10, 20, 30}
+
+nums[0]
+
+OUTPUT:
+Error
+
+Use loop instead.
+
+
+==================================================
+5. LOOP THROUGH SET
+==================================================
+
+fruits = {"Apple", "Banana", "Mango"}
+
+for item in fruits:
+    print(item)
+
+
+==================================================
+6. ADD ITEMS
+==================================================
+
+nums = {1, 2, 3}
+
+nums.add(4)
+
+print(nums)
+
+OUTPUT:
+{1, 2, 3, 4}
+
+
+==================================================
+7. ADD MULTIPLE ITEMS
+==================================================
+
+nums = {1, 2}
+
+nums.update([3, 4, 5])
+
+print(nums)
+
+OUTPUT:
+{1, 2, 3, 4, 5}
+
+
+==================================================
+8. REMOVE ITEMS
+==================================================
+
+nums = {1, 2, 3, 4}
+
+nums.remove(3)
+print(nums)
+
+remove() gives error if item missing.
+
+Use discard():
+
+nums.discard(10)
+
+No error.
+
+
+==================================================
+9. POP AND CLEAR
+==================================================
+
+nums = {1, 2, 3}
+
+nums.pop()     # removes random item
+nums.clear()   # removes all items
+
+
+==================================================
+10. UNION
+==================================================
+
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+print(a | b)
+
+OUTPUT:
+{1, 2, 3, 4, 5}
+
+or:
+
+print(a.union(b))
+
+
+==================================================
+11. INTERSECTION
+==================================================
+
+a = {1, 2, 3}
+b = {2, 3, 4}
+
+print(a & b)
+
+OUTPUT:
+{2, 3}
+
+
+Common values.
+
+
+==================================================
+12. DIFFERENCE
+==================================================
+
+a = {1, 2, 3}
+b = {2, 3, 4}
+
+print(a - b)
+
+OUTPUT:
+{1}
+
+
+Items in a not in b.
+
+
+==================================================
+13. MEMBERSHIP CHECK
+==================================================
+
+nums = {1, 2, 3}
+
+print(2 in nums)   # True
+print(5 in nums)   # False
+
+
+==================================================
+14. REAL WORLD USES
+==================================================
+
+- Remove duplicate names
+- Unique visitors count
+- Common subjects between students
+- Tags system
+- Fast search checks
+
+
+QUIZ:
+
+1. Do sets allow duplicate values?
+2. Are sets ordered?
+3. Which method adds one item?
+4. Which operator gives union?
+5. Which operator gives intersection?
+
+
+CODING PROBLEM:
+
+Create two sets:
+
+A = {1,2,3,4}
+B = {3,4,5,6}
+
+Print:
+
+Union
+Intersection
+Difference A-B
+
+
+HOMEWORK:
+
+1. Create set with duplicate values
+2. Add 3 new items
+3. Remove one item
+4. Find common values of two sets
+5. Check if one value exists
+
+
+NOTES_SUMMARY:
+
+- Set stores unique values
+- Uses { }
+- No duplicates allowed
+- Unordered collection
+- add(), update(), remove(), discard()
+- Union = |
+- Intersection = &
+- Great for unique data and fast checks
+
+DAY: 19
+TITLE: Dictionaries in Python
+
+EXPLANATION:
+
+A dictionary is a collection used to store data in key-value pairs.
+
+Instead of index numbers like lists, dictionaries use keys.
+
+Example:
+
+student = {
+    "name": "Alex",
+    "age": 20,
+    "city": "Chennai"
+}
+
+Here:
+
+name -> key
+Alex -> value
+
+age -> key
+20 -> value
+
+
+==================================================
+1. WHY DICTIONARIES?
+==================================================
+
+Use dictionaries when data has labels.
+
+Bad using list:
+
+data = ["Alex", 20, "Chennai"]
+
+What is 20? Hard to know.
+
+Better:
+
+data = {
+    "name": "Alex",
+    "age": 20,
+    "city": "Chennai"
+}
+
+
+==================================================
+2. CREATING A DICTIONARY
+==================================================
+
+student = {
+    "name": "Sathish",
+    "age": 19,
+    "course": "Python"
+}
+
+print(student)
+
+OUTPUT:
+{'name': 'Sathish', 'age': 19, 'course': 'Python'}
+
+
+Uses curly braces { }
+
+
+==================================================
+3. ACCESS VALUES
+==================================================
+
+student = {
+    "name": "Alex",
+    "age": 20
+}
+
+print(student["name"])
+print(student["age"])
+
+OUTPUT:
+Alex
+20
+
+
+==================================================
+4. USING get()
+==================================================
+
+print(student.get("name"))
+
+If key missing:
+
+print(student.get("city"))
+
+OUTPUT:
+None
+
+Safer than student["city"] which gives error.
+
+
+==================================================
+5. CHANGE VALUES
+==================================================
+
+student["age"] = 21
+
+print(student)
+
+OUTPUT:
+{'name': 'Alex', 'age': 21}
+
+
+==================================================
+6. ADD NEW KEY
+==================================================
+
+student["city"] = "Chennai"
+
+print(student)
+
+OUTPUT:
+{'name': 'Alex', 'age': 21, 'city': 'Chennai'}
+
+
+==================================================
+7. REMOVE ITEMS
+==================================================
+
+student.pop("age")
+
+del student["name"]
+
+student.clear()
+
+
+==================================================
+8. LOOP THROUGH DICTIONARY
+==================================================
+
+student = {
+    "name": "Alex",
+    "age": 20
+}
+
+for key in student:
+    print(key)
+
+OUTPUT:
+name
+age
+
+
+Values:
+
+for value in student.values():
+    print(value)
+
+Items:
+
+for k, v in student.items():
+    print(k, v)
+
+
+==================================================
+9. LENGTH OF DICTIONARY
+==================================================
+
+print(len(student))
+
+
+==================================================
+10. CHECK KEY EXISTS
+==================================================
+
+print("name" in student)   # True
+print("marks" in student)  # False
+
+
+==================================================
+11. NESTED DICTIONARY
+==================================================
+
+students = {
+    "s1": {"name": "Alex", "age": 20},
+    "s2": {"name": "John", "age": 21}
+}
+
+print(students["s1"]["name"])
+
+OUTPUT:
+Alex
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- Student records
+- User profiles
+- Product details
+- API responses
+- Configuration settings
+
+
+QUIZ:
+
+1. Dictionary stores data in what format?
+2. Which brackets are used?
+3. Which method safely gets value?
+4. How to add new key?
+5. Which method removes all items?
+
+
+CODING PROBLEM:
+
+Create a dictionary with:
+
+name
+age
+city
+
+Print all values.
+
+Example:
+
+person = {
+    "name": "Sathish",
+    "age": 19,
+    "city": "Chennai"
+}
+
+print(person["name"])
+print(person["age"])
+print(person["city"])
+
+
+HOMEWORK:
+
+1. Create student dictionary
+2. Change one value
+3. Add marks key
+4. Print keys and values using loop
+5. Create nested dictionary
+
+
+NOTES_SUMMARY:
+
+- Dictionary stores key:value pairs
+- Uses { }
+- Access using key
+- get() is safe access method
+- Can add/change/remove values
+- items(), keys(), values() useful
+- Great for labeled real-world data
+
+DAY: 20
+TITLE: File Handling in Python
+
+EXPLANATION:
+
+File handling allows Python programs to:
+
+1. Create files
+2. Read files
+3. Write data into files
+4. Append new data
+5. Store information permanently
+
+Without files, data disappears when program closes.
+
+Examples:
+
+- Save student records
+- Notes app
+- Log files
+- Reports
+- User data storage
+
+
+==================================================
+1. OPENING A FILE
+==================================================
+
+Syntax:
+
+open("filename", "mode")
+
+Example:
+
+file = open("data.txt", "r")
+
+Modes:
+
+"r" = Read
+"w" = Write
+"a" = Append
+"x" = Create new file
+"b" = Binary mode
+
+
+==================================================
+2. READ FILE
+==================================================
+
+file = open("data.txt", "r")
+
+content = file.read()
+
+print(content)
+
+file.close()
+
+
+read() reads full file.
+
+
+==================================================
+3. READ ONE LINE
+==================================================
+
+file = open("data.txt", "r")
+
+line = file.readline()
+
+print(line)
+
+file.close()
+
+
+==================================================
+4. READ ALL LINES
+==================================================
+
+file = open("data.txt", "r")
+
+lines = file.readlines()
+
+print(lines)
+
+file.close()
+
+
+==================================================
+5. WRITE FILE
+==================================================
+
+file = open("notes.txt", "w")
+
+file.write("Hello Python")
+
+file.close()
+
+
+Important:
+
+If file exists, "w" overwrites old content.
+
+
+==================================================
+6. APPEND FILE
+==================================================
+
+file = open("notes.txt", "a")
+
+file.write("\nNew Line Added")
+
+file.close()
+
+
+Appends data without deleting old content.
+
+
+==================================================
+7. CREATE FILE
+==================================================
+
+file = open("newfile.txt", "x")
+
+file.close()
+
+
+Creates new file.
+Gives error if already exists.
+
+
+==================================================
+8. BEST METHOD: with open()
+==================================================
+
+with open("data.txt", "r") as file:
+    content = file.read()
+    print(content)
+
+
+No need to manually close.
+Python closes automatically.
+
+
+==================================================
+9. WRITE MULTIPLE LINES
+==================================================
+
+with open("students.txt", "w") as file:
+    file.write("Alex\n")
+    file.write("John\n")
+    file.write("Sathish\n")
+
+
+==================================================
+10. CHECK FILE EXISTS
+==================================================
+
+import os
+
+if os.path.exists("data.txt"):
+    print("Exists")
+else:
+    print("Not Found")
+
+
+==================================================
+11. DELETE FILE
+==================================================
+
+import os
+
+os.remove("data.txt")
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- Save login data
+- Export reports
+- Chat history
+- Attendance system
+- Inventory storage
+
+
+QUIZ:
+
+1. Which mode reads file?
+2. Which mode overwrites file?
+3. Which mode adds data at end?
+4. What does read() do?
+5. Why use with open()?
+
+
+CODING PROBLEM:
+
+Create a file named mynotes.txt
+Write your name and city into it
+Then read and print the file content
+
+Example:
+
+with open("mynotes.txt", "w") as file:
+    file.write("Sathish\nChennai")
+
+with open("mynotes.txt", "r") as file:
+    print(file.read())
+
+
+HOMEWORK:
+
+1. Create file with 5 lines
+2. Append one extra line
+3. Read full file
+4. Read line by line
+5. Delete a test file
+
+
+NOTES_SUMMARY:
+
+- Files store permanent data
+- open(name, mode)
+- r = read
+- w = write
+- a = append
+- with open() is best practice
+- Useful for real applications and storage
+
+DAY: 21
+TITLE: Exception Handling in Python
+
+EXPLANATION:
+
+While writing programs, errors can happen.
+
+Examples:
+
+- User enters text instead of number
+- File not found
+- Division by zero
+- Wrong variable name
+
+If errors are not handled, the program crashes.
+
+Exception handling allows programs to continue safely.
+
+Python uses:
+
+try
+except
+else
+finally
+
+
+==================================================
+1. BASIC try and except
+==================================================
+
+Syntax:
+
+try:
+    risky code
+except:
+    handle error
+
+Example:
+
+try:
+    num = int(input("Enter number: "))
+    print(num)
+except:
+    print("Invalid input")
+
+If user enters text:
+
+hello
+
+OUTPUT:
+Invalid input
+
+
+==================================================
+2. DIVISION ERROR
+==================================================
+
+try:
+    a = 10
+    b = 0
+    print(a / b)
+except:
+    print("Cannot divide by zero")
+
+OUTPUT:
+Cannot divide by zero
+
+
+==================================================
+3. SPECIFIC EXCEPTIONS
+==================================================
+
+Better to catch exact errors.
+
+try:
+    num = int("abc")
+except ValueError:
+    print("Value Error")
+
+OUTPUT:
+Value Error
+
+
+Another example:
+
+try:
+    print(10 / 0)
+except ZeroDivisionError:
+    print("Zero Division Error")
+
+
+==================================================
+4. MULTIPLE EXCEPT BLOCKS
+==================================================
+
+try:
+    x = int(input("Enter number: "))
+    print(10 / x)
+
+except ValueError:
+    print("Enter valid number")
+
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+
+
+==================================================
+5. else BLOCK
+==================================================
+
+Runs only if no error occurs.
+
+try:
+    x = int(input("Enter number: "))
+except:
+    print("Error")
+else:
+    print("Success:", x)
+
+
+==================================================
+6. finally BLOCK
+==================================================
+
+Runs always, whether error happens or not.
+
+try:
+    print("Opening file")
+except:
+    print("Error")
+finally:
+    print("Closing file")
+
+OUTPUT:
+Opening file
+Closing file
+
+
+Useful for cleanup work.
+
+
+==================================================
+7. USING WITH FILES
+==================================================
+
+try:
+    file = open("data.txt", "r")
+    print(file.read())
+except FileNotFoundError:
+    print("File not found")
+
+
+==================================================
+8. WHY EXCEPTION HANDLING?
+==================================================
+
+- Prevent crashes
+- Better user experience
+- Handle unexpected inputs
+- Safe file operations
+- Professional applications
+
+
+==================================================
+9. COMMON ERRORS
+==================================================
+
+ValueError
+ZeroDivisionError
+FileNotFoundError
+IndexError
+KeyError
+TypeError
+
+
+QUIZ:
+
+1. Which keyword handles risky code?
+2. Which block catches errors?
+3. Which error comes from 10 / 0 ?
+4. When does else run?
+5. Does finally always run?
+
+
+CODING PROBLEM:
+
+Create a program:
+
+Take two numbers from user
+Divide first by second
+Handle divide by zero error
+
+Example:
+
+try:
+    a = int(input("Enter first: "))
+    b = int(input("Enter second: "))
+    print(a / b)
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+
+
+HOMEWORK:
+
+1. Handle invalid integer input
+2. Handle file not found error
+3. Use else block example
+4. Use finally block example
+5. Practice 5 different exceptions
+
+
+NOTES_SUMMARY:
+
+- Exceptions are runtime errors
+- try = risky code
+- except = handle error
+- else = runs if no error
+- finally = always runs
+- Makes programs safe and professional
+
+DAY: 22
+TITLE: Object-Oriented Programming (OOP) Basics
+
+EXPLANATION:
+
+Object-Oriented Programming (OOP) is a way of writing programs using objects and classes.
+
+Real world examples:
+
+Car -> object
+Student -> object
+Phone -> object
+
+Each object has:
+
+1. Data (attributes)
+2. Actions (methods)
+
+Example:
+
+Student:
+- name
+- age
+- marks
+
+Actions:
+- study()
+- attend_class()
+
+
+==================================================
+1. WHAT IS A CLASS?
+==================================================
+
+A class is a blueprint for creating objects.
+
+Example:
+
+class Student:
+    pass
+
+This creates an empty class.
+
+
+==================================================
+2. CREATE OBJECT
+==================================================
+
+class Student:
+    pass
+
+s1 = Student()
+s2 = Student()
+
+print(type(s1))
+
+OUTPUT:
+<class '__main__.Student'>
+
+
+Objects are created from class.
+
+
+==================================================
+3. ATTRIBUTES
+==================================================
+
+class Student:
+    pass
+
+s1 = Student()
+
+s1.name = "Alex"
+s1.age = 20
+
+print(s1.name)
+print(s1.age)
+
+OUTPUT:
+Alex
+20
+
+
+==================================================
+4. __init__ METHOD (CONSTRUCTOR)
+==================================================
+
+Used to assign values automatically when object is created.
+
+class Student:
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+s1 = Student("Sathish", 19)
+
+print(s1.name)
+print(s1.age)
+
+OUTPUT:
+Sathish
+19
+
+
+==================================================
+5. WHAT IS self?
+==================================================
+
+self refers to current object.
+
+It is used to store object data.
+
+self.name means name of that object.
+
+
+==================================================
+6. METHODS IN CLASS
+==================================================
+
+class Student:
+
+    def __init__(self, name):
+        self.name = name
+
+    def greet(self):
+        print("Hello", self.name)
+
+s1 = Student("Alex")
+s1.greet()
+
+OUTPUT:
+Hello Alex
+
+
+==================================================
+7. MULTIPLE OBJECTS
+==================================================
+
+s1 = Student("Alex")
+s2 = Student("John")
+
+Each object has separate data.
+
+
+==================================================
+8. REAL WORLD EXAMPLE
+==================================================
+
+class Car:
+
+    def __init__(self, brand):
+        self.brand = brand
+
+    def start(self):
+        print(self.brand, "started")
+
+c1 = Car("BMW")
+c1.start()
+
+OUTPUT:
+BMW started
+
+
+==================================================
+9. WHY OOP?
+==================================================
+
+- Organizes code
+- Reusable structure
+- Easier maintenance
+- Models real world things
+- Used in large projects
+
+
+==================================================
+10. REAL WORLD USES
+==================================================
+
+- Banking systems
+- Student management
+- Games
+- Mobile apps
+- E-commerce systems
+
+
+QUIZ:
+
+1. What is a class?
+2. What is an object?
+3. Which method runs automatically on object creation?
+4. What does self refer to?
+5. Can one class create many objects?
+
+
+CODING PROBLEM:
+
+Create a class Person with:
+
+name attribute
+method say_hello()
+
+Output:
+
+Hello <name>
+
+Example:
+
+class Person:
+
+    def __init__(self, name):
+        self.name = name
+
+    def say_hello(self):
+        print("Hello", self.name)
+
+p1 = Person("Sathish")
+p1.say_hello()
+
+
+HOMEWORK:
+
+1. Create Car class with brand
+2. Create Student class with name, age
+3. Create method display()
+4. Create 3 objects from same class
+5. Practice self and __init__ examples
+
+
+NOTES_SUMMARY:
+
+- Class = blueprint
+- Object = instance of class
+- __init__ runs during creation
+- self refers to current object
+- Methods are functions inside class
+- OOP is powerful for real projects
+
+DAY: 23
+TITLE: OOP Inheritance, Encapsulation and Polymorphism
+
+EXPLANATION:
+
+In Day 22, you learned classes and objects.
+
+Today we learn advanced OOP concepts:
+
+1. Inheritance
+2. Encapsulation
+3. Polymorphism
+
+These are used in professional software development.
+
+
+==================================================
+1. INHERITANCE
+==================================================
+
+Inheritance means one class gets features of another class.
+
+Parent class -> base class
+Child class -> derived class
+
+Example:
+
+class Animal:
+    def sound(self):
+        print("Animal makes sound")
+
+class Dog(Animal):
+    pass
+
+d = Dog()
+d.sound()
+
+OUTPUT:
+Animal makes sound
+
+
+Dog inherited sound() from Animal.
+
+
+==================================================
+2. CHILD CLASS WITH OWN METHOD
+==================================================
+
+class Animal:
+    def eat(self):
+        print("Eating")
+
+class Dog(Animal):
+    def bark(self):
+        print("Barking")
+
+d = Dog()
+
+d.eat()
+d.bark()
+
+OUTPUT:
+Eating
+Barking
+
+
+==================================================
+3. METHOD OVERRIDING
+==================================================
+
+Child class can replace parent method.
+
+class Animal:
+    def sound(self):
+        print("Animal sound")
+
+class Dog(Animal):
+    def sound(self):
+        print("Bark")
+
+d = Dog()
+d.sound()
+
+OUTPUT:
+Bark
+
+
+==================================================
+4. super() FUNCTION
+==================================================
+
+Used to call parent class methods.
+
+class Animal:
+    def __init__(self):
+        print("Animal created")
+
+class Dog(Animal):
+    def __init__(self):
+        super().__init__()
+        print("Dog created")
+
+d = Dog()
+
+OUTPUT:
+Animal created
+Dog created
+
+
+==================================================
+5. ENCAPSULATION
+==================================================
+
+Encapsulation means protecting data inside class.
+
+Use underscore naming:
+
+class Bank:
+
+    def __init__(self):
+        self._balance = 1000
+
+b = Bank()
+print(b._balance)
+
+_single underscore means internal use.
+
+
+==================================================
+6. PRIVATE VARIABLE
+==================================================
+
+class Bank:
+
+    def __init__(self):
+        self.__pin = 1234
+
+Double underscore makes name private-like.
+
+Cannot access directly easily:
+
+b = Bank()
+# b.__pin  -> Error
+
+
+==================================================
+7. GETTER METHOD
+==================================================
+
+class Bank:
+
+    def __init__(self):
+        self.__balance = 5000
+
+    def get_balance(self):
+        return self.__balance
+
+b = Bank()
+print(b.get_balance())
+
+OUTPUT:
+5000
+
+
+==================================================
+8. POLYMORPHISM
+==================================================
+
+Same method name, different behavior.
+
+class Cat:
+    def sound(self):
+        print("Meow")
+
+class Dog:
+    def sound(self):
+        print("Bark")
+
+for animal in [Cat(), Dog()]:
+    animal.sound()
+
+OUTPUT:
+Meow
+Bark
+
+
+==================================================
+9. WHY THESE CONCEPTS?
+==================================================
+
+Inheritance:
+Reuse code
+
+Encapsulation:
+Protect data
+
+Polymorphism:
+Flexible design
+
+
+==================================================
+10. REAL WORLD USES
+==================================================
+
+- Banking apps
+- Employee systems
+- Game characters
+- E-commerce products
+- Vehicle management systems
+
+
+QUIZ:
+
+1. What is inheritance?
+2. Which function calls parent constructor?
+3. What is method overriding?
+4. Why use encapsulation?
+5. What is polymorphism?
+
+
+CODING PROBLEM:
+
+Create class Vehicle with method start()
+
+Create child class Bike
+
+Call inherited method.
+
+Example:
+
+class Vehicle:
+    def start(self):
+        print("Vehicle Started")
+
+class Bike(Vehicle):
+    pass
+
+b = Bike()
+b.start()
+
+
+HOMEWORK:
+
+1. Create Animal -> Cat inheritance
+2. Override one method
+3. Use super() in constructor
+4. Create private variable example
+5. Create two classes with same method name
+
+
+NOTES_SUMMARY:
+
+- Inheritance = child gets parent features
+- Overriding = replace parent method
+- super() calls parent methods
+- Encapsulation protects data
+- Polymorphism = same method, different behavior
+- Core concepts for advanced OOP
+
+DAY: 24
+TITLE: Modules and Packages in Python
+
+EXPLANATION:
+
+As programs grow bigger, writing all code in one file becomes difficult.
+
+Python solves this using:
+
+1. Modules
+2. Packages
+
+They help organize code into separate files and folders.
+
+
+==================================================
+1. WHAT IS A MODULE?
+==================================================
+
+A module is a Python file (.py) containing functions, variables, or classes.
+
+Example:
+
+math_tools.py
+
+def add(a, b):
+    return a + b
+
+def sub(a, b):
+    return a - b
+
+
+Now this file becomes a reusable module.
+
+
+==================================================
+2. IMPORTING A MODULE
+==================================================
+
+main.py
+
+import math_tools
+
+print(math_tools.add(5, 3))
+print(math_tools.sub(10, 4))
+
+OUTPUT:
+8
+6
+
+
+==================================================
+3. IMPORT SPECIFIC FUNCTION
+==================================================
+
+from math_tools import add
+
+print(add(2, 3))
+
+OUTPUT:
+5
+
+
+==================================================
+4. IMPORT MULTIPLE FUNCTIONS
+==================================================
+
+from math_tools import add, sub
+
+
+==================================================
+5. IMPORT WITH ALIAS
+==================================================
+
+import math_tools as mt
+
+print(mt.add(5, 5))
+
+OUTPUT:
+10
+
+
+==================================================
+6. BUILT-IN MODULES
+==================================================
+
+Python already provides many modules.
+
+Example:
+
+import math
+
+print(math.sqrt(25))   # 5.0
+print(math.pi)         # 3.14159...
+
+
+Another:
+
+import random
+
+print(random.randint(1, 10))
+
+
+==================================================
+7. USEFUL BUILT-IN MODULES
+==================================================
+
+math      -> calculations
+random    -> random values
+os        -> files/folders
+datetime  -> date and time
+statistics -> averages
+
+
+==================================================
+8. WHAT IS A PACKAGE?
+==================================================
+
+A package is a folder containing multiple modules.
+
+Example structure:
+
+myapp/
+    __init__.py
+    calc.py
+    users.py
+
+This folder becomes package.
+
+
+==================================================
+9. IMPORT FROM PACKAGE
+==================================================
+
+from myapp.calc import add
+
+print(add(2, 5))
+
+
+==================================================
+10. __name__ == "__main__"
+==================================================
+
+Used to run code only when file is executed directly.
+
+Example:
+
+def greet():
+    print("Hello")
+
+if __name__ == "__main__":
+    greet()
+
+
+Useful in modules.
+
+
+==================================================
+11. WHY MODULES?
+==================================================
+
+- Reuse code
+- Clean projects
+- Easy maintenance
+- Separate logic
+- Team collaboration
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- Banking system split into files
+- Login module
+- Payment module
+- Report module
+- Large company projects
+
+
+QUIZ:
+
+1. What is a module?
+2. Which keyword imports module?
+3. What is alias import?
+4. What is a package?
+5. Name two built-in modules.
+
+
+CODING PROBLEM:
+
+Create file calc.py with:
+
+def add(a,b):
+    return a+b
+
+Then import and use in main file.
+
+Example:
+
+import calc
+
+print(calc.add(5,3))
+
+
+HOMEWORK:
+
+1. Import math module
+2. Use sqrt() and pi
+3. Use random.randint()
+4. Create your own module
+5. Create folder package structure
+
+
+NOTES_SUMMARY:
+
+- Module = .py file with reusable code
+- import loads module
+- from ... import ... imports specific items
+- as gives alias name
+- Package = folder of modules
+- Built-in modules save time
+- Essential for large projects
+
+DAY: 25
+TITLE: Date, Time and Random Modules in Python
+
+EXPLANATION:
+
+Python provides many built-in modules.
+
+Today we learn three useful modules:
+
+1. datetime  -> work with date and time
+2. time      -> delays and timestamps
+3. random    -> random numbers and choices
+
+These are used in games, apps, automation, reports, and scheduling.
+
+
+==================================================
+1. DATETIME MODULE
+==================================================
+
+Used to get current date and time.
+
+Example:
+
+import datetime
+
+now = datetime.datetime.now()
+
+print(now)
+
+OUTPUT:
+2026-04-19 10:30:00.123456
+
+(Current output depends on system time)
+
+
+==================================================
+2. CURRENT DATE
+==================================================
+
+import datetime
+
+today = datetime.date.today()
+
+print(today)
+
+OUTPUT:
+2026-04-19
+
+
+==================================================
+3. CURRENT TIME
+==================================================
+
+import datetime
+
+now = datetime.datetime.now()
+
+print(now.time())
+
+
+==================================================
+4. ACCESS YEAR, MONTH, DAY
+==================================================
+
+import datetime
+
+today = datetime.date.today()
+
+print(today.year)
+print(today.month)
+print(today.day)
+
+
+==================================================
+5. FORMAT DATE/TIME
+==================================================
+
+import datetime
+
+now = datetime.datetime.now()
+
+print(now.strftime("%d-%m-%Y"))
+print(now.strftime("%H:%M:%S"))
+
+Example OUTPUT:
+19-04-2026
+10:30:45
+
+
+Common codes:
+
+%d = day
+%m = month
+%Y = full year
+%H = hour (24)
+%M = minute
+%S = second
+
+
+==================================================
+6. TIME MODULE
+==================================================
+
+Used for delays and timestamps.
+
+Example:
+
+import time
+
+print("Start")
+time.sleep(3)
+print("End")
+
+Program waits 3 seconds.
+
+
+==================================================
+7. CURRENT TIMESTAMP
+==================================================
+
+import time
+
+print(time.time())
+
+Returns seconds since Unix epoch.
+
+
+==================================================
+8. RANDOM MODULE
+==================================================
+
+Used to generate random values.
+
+Example:
+
+import random
+
+print(random.randint(1, 10))
+
+Random number between 1 and 10.
+
+
+==================================================
+9. RANDOM CHOICE
+==================================================
+
+import random
+
+fruits = ["Apple", "Banana", "Mango"]
+
+print(random.choice(fruits))
+
+Randomly selects one item.
+
+
+==================================================
+10. SHUFFLE LIST
+==================================================
+
+import random
+
+cards = [1,2,3,4,5]
+
+random.shuffle(cards)
+
+print(cards)
+
+
+==================================================
+11. SIMPLE PASSWORD OTP
+==================================================
+
+import random
+
+otp = random.randint(1000, 9999)
+
+print("OTP:", otp)
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- OTP generation
+- Timers
+- Game dice rolling
+- Attendance timestamps
+- Reports with current date
+- Scheduling tasks
+
+
+QUIZ:
+
+1. Which module gives current date?
+2. What does sleep(2) do?
+3. Which function gives random integer?
+4. What does choice() do?
+5. Which function formats date text?
+
+
+CODING PROBLEM:
+
+Create a program:
+
+Print current date
+Print random number 1 to 100
+
+Example:
+
+import datetime
+import random
+
+print(datetime.date.today())
+print(random.randint(1,100))
+
+
+HOMEWORK:
+
+1. Print current year
+2. Wait 5 seconds using sleep()
+3. Generate random OTP
+4. Pick random color from list
+5. Format date as DD/MM/YYYY
+
+
+NOTES_SUMMARY:
+
+- datetime handles date/time
+- now() gives current date & time
+- strftime() formats date
+- time.sleep() pauses program
+- random.randint() gives random number
+- random.choice() picks random item
+- Useful for apps, games, automation
+
+DAY: 26
+TITLE: Working with APIs in Python (Requests + JSON)
+
+EXPLANATION:
+
+Many modern applications use APIs.
+
+API = Application Programming Interface
+
+An API allows one program to communicate with another program and exchange data.
+
+Examples:
+
+- Weather apps get weather data from API
+- Payment apps connect to bank API
+- Social media apps use APIs
+- AI apps connect to AI APIs
+
+Python can call APIs and read responses.
+
+
+==================================================
+1. WHAT IS AN API?
+==================================================
+
+Think of API like a waiter in restaurant.
+
+You (app) request food.
+Waiter (API) takes request.
+Kitchen (server) sends result.
+
+You receive response.
+
+
+==================================================
+2. INSTALL REQUESTS LIBRARY
+==================================================
+
+pip install requests
+
+requests is popular for HTTP requests.
+
+
+==================================================
+3. BASIC GET REQUEST
+==================================================
+
+import requests
+
+url = "https://api.github.com"
+
+response = requests.get(url)
+
+print(response.status_code)
+
+OUTPUT:
+200
+
+200 means success.
+
+
+==================================================
+4. RESPONSE TEXT
+==================================================
+
+print(response.text)
+
+Shows raw data returned by server.
+
+
+==================================================
+5. JSON DATA
+==================================================
+
+Many APIs return JSON.
+
+JSON looks like dictionary.
+
+Example:
+
+{
+  "name": "Alex",
+  "age": 20
+}
+
+In Python:
+
+data = response.json()
+
+print(data)
+
+
+==================================================
+6. ACCESS JSON VALUES
+==================================================
+
+import requests
+
+url = "https://api.github.com"
+
+response = requests.get(url)
+
+data = response.json()
+
+print(data["current_user_url"])
+
+
+==================================================
+7. QUERY PARAMETERS
+==================================================
+
+params = {
+    "q": "python"
+}
+
+response = requests.get(url, params=params)
+
+
+Used to send search values.
+
+
+==================================================
+8. HANDLE API ERRORS
+==================================================
+
+import requests
+
+try:
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        print("Success")
+    else:
+        print("Failed")
+
+except:
+    print("Network Error")
+
+
+==================================================
+9. POST REQUEST
+==================================================
+
+Used to send data.
+
+data = {
+    "name": "Alex"
+}
+
+response = requests.post(url, json=data)
+
+
+==================================================
+10. REAL API EXAMPLE IDEAS
+==================================================
+
+- Weather API
+- Currency exchange API
+- News API
+- Movie API
+- AI chatbot API
+
+
+==================================================
+11. WHY APIs MATTER
+==================================================
+
+- Connect apps to internet services
+- Use real-time data
+- Build powerful projects
+- Industry-level development
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- E-commerce payment gateway
+- Live sports score apps
+- Maps and location apps
+- Telegram bots
+- AI assistants
+
+
+QUIZ:
+
+1. What does API stand for?
+2. Which library is common for API requests?
+3. What does status code 200 mean?
+4. Which method converts response to dictionary-like data?
+5. Which request sends data to server?
+
+
+CODING PROBLEM:
+
+Write a program:
+
+Send GET request to:
+
+https://api.github.com
+
+Print status code.
+
+Example:
+
+import requests
+
+response = requests.get("https://api.github.com")
+print(response.status_code)
+
+
+HOMEWORK:
+
+1. Install requests library
+2. Make one GET request
+3. Print response text
+4. Convert JSON response
+5. Read one key from JSON
+
+
+NOTES_SUMMARY:
+
+- API connects programs
+- requests library used in Python
+- GET reads data
+- POST sends data
+- response.status_code checks success
+- response.json() converts JSON
+- APIs are essential in modern projects
+
+DAY: 27
+TITLE: Web Scraping in Python (BeautifulSoup)
+
+EXPLANATION:
+
+Web scraping means collecting data from websites automatically using Python.
+
+Instead of manually copying data, Python can read webpage content and extract useful information.
+
+Examples:
+
+- Product prices
+- News headlines
+- Job listings
+- Weather data
+- Sports scores
+
+Important:
+Always respect website rules, Terms of Service, and robots.txt. Some websites do not allow scraping.
+
+
+==================================================
+1. REQUIRED LIBRARIES
+==================================================
+
+Install:
+
+pip install requests
+pip install beautifulsoup4
+
+Libraries:
+
+requests      -> downloads webpage HTML
+BeautifulSoup -> reads and parses HTML
+
+
+==================================================
+2. WHAT IS HTML?
+==================================================
+
+Web pages are made using HTML.
+
+Example:
+
+<h1>Title</h1>
+<p>Hello</p>
+
+Tags help structure data.
+
+
+==================================================
+3. DOWNLOAD WEBPAGE
+==================================================
+
+import requests
+
+url = "https://example.com"
+
+response = requests.get(url)
+
+print(response.status_code)
+print(response.text)
+
+
+==================================================
+4. PARSE HTML
+==================================================
+
+from bs4 import BeautifulSoup
+import requests
+
+html = requests.get("https://example.com").text
+
+soup = BeautifulSoup(html, "html.parser")
+
+print(soup.title)
+
+OUTPUT:
+<title>Example Domain</title>
+
+
+==================================================
+5. GET PAGE TITLE
+==================================================
+
+print(soup.title.text)
+
+OUTPUT:
+Example Domain
+
+
+==================================================
+6. FIND FIRST ELEMENT
+==================================================
+
+heading = soup.find("h1")
+
+print(heading.text)
+
+
+==================================================
+7. FIND ALL ELEMENTS
+==================================================
+
+links = soup.find_all("a")
+
+for link in links:
+    print(link.text)
+
+
+==================================================
+8. GET ATTRIBUTE VALUES
+==================================================
+
+link = soup.find("a")
+
+print(link["href"])
+
+Gets URL inside anchor tag.
+
+
+==================================================
+9. EXAMPLE: EXTRACT HEADLINES
+==================================================
+
+headlines = soup.find_all("h2")
+
+for item in headlines:
+    print(item.text.strip())
+
+
+==================================================
+10. SAVE DATA TO FILE
+==================================================
+
+with open("data.txt", "w") as file:
+    file.write(soup.title.text)
+
+
+==================================================
+11. HANDLE ERRORS
+==================================================
+
+try:
+    response = requests.get(url)
+    if response.status_code == 200:
+        print("Success")
+except:
+    print("Error loading page")
+
+
+==================================================
+12. REAL WORLD USES
+==================================================
+
+- Price comparison tools
+- Job alert systems
+- News collectors
+- Research data collection
+- Market analysis
+
+
+==================================================
+13. ETHICS / IMPORTANT RULES
+==================================================
+
+- Do not overload websites
+- Follow robots.txt if applicable
+- Respect Terms of Service
+- Avoid private/login pages without permission
+- Use APIs when available
+
+
+QUIZ:
+
+1. What is web scraping?
+2. Which library parses HTML?
+3. What does soup.find() return?
+4. Which method gets multiple tags?
+5. What file usually tells crawler rules?
+
+
+CODING PROBLEM:
+
+Download https://example.com
+Print page title.
+
+Example:
+
+import requests
+from bs4 import BeautifulSoup
+
+html = requests.get("https://example.com").text
+soup = BeautifulSoup(html, "html.parser")
+
+print(soup.title.text)
+
+
+HOMEWORK:
+
+1. Install BeautifulSoup
+2. Print title of example.com
+3. Find first h1 tag
+4. Extract all links from a page
+5. Save extracted title to file
+
+
+NOTES_SUMMARY:
+
+- Web scraping = automatic website data extraction
+- requests downloads page
+- BeautifulSoup parses HTML
+- find() gets one element
+- find_all() gets many elements
+- .text extracts visible text
+- Use responsibly and legally
+
+DAY: 28
+TITLE: Automation with Python (Real-Life Task Automation)
+
+EXPLANATION:
+
+Automation means making tasks happen automatically without manual work.
+
+Python is widely used for automation in:
+
+- File management
+- Emails
+- Excel reports
+- Web tasks
+- Repetitive office work
+
+Goal: Save time and reduce human effort.
+
+
+==================================================
+1. WHY AUTOMATION?
+==================================================
+
+Without automation:
+- Repeating same task daily
+- Time-consuming
+- Human errors
+
+With automation:
+- Fast
+- Accurate
+- Saves effort
+
+
+==================================================
+2. FILE AUTOMATION (BASIC)
+==================================================
+
+Example: Create multiple files automatically
+
+for i in range(1, 4):
+    with open(f"file{i}.txt", "w") as file:
+        file.write("This is file " + str(i))
+
+OUTPUT:
+file1.txt
+file2.txt
+file3.txt
+
+
+==================================================
+3. READ MULTIPLE FILES
+==================================================
+
+import os
+
+files = os.listdir()
+
+for f in files:
+    print(f)
+
+
+==================================================
+4. RENAMING FILES
+==================================================
+
+import os
+
+os.rename("old.txt", "new.txt")
+
+
+==================================================
+5. DELETE FILES
+==================================================
+
+import os
+
+if os.path.exists("test.txt"):
+    os.remove("test.txt")
+
+
+==================================================
+6. AUTOMATED EMAIL (CONCEPT)
+==================================================
+
+Python can send emails using smtplib.
+
+Example idea:
+
+- Send daily report
+- Send alerts
+- Send notifications
+
+(import smtplib concept only for beginners)
+
+
+==================================================
+7. KEYBOARD AUTOMATION (pyautogui)
+==================================================
+
+pip install pyautogui
+
+Example:
+
+import pyautogui
+
+pyautogui.write("Hello")
+pyautogui.press("enter")
+
+It simulates keyboard typing.
+
+
+==================================================
+8. MOUSE AUTOMATION
+==================================================
+
+pyautogui.click()
+pyautogui.moveTo(100, 200)
+
+
+==================================================
+9. SIMPLE REPORT GENERATION
+==================================================
+
+data = ["Alex", "John", "Sathish"]
+
+with open("report.txt", "w") as file:
+    for name in data:
+        file.write(name + "\n")
+
+
+==================================================
+10. REAL WORLD USES
+==================================================
+
+- Auto report generation
+- Data entry automation
+- Email reminders
+- File sorting system
+- Social media posting bots
+
+
+==================================================
+11. SCHEDULING TASKS
+==================================================
+
+Using time module:
+
+import time
+
+while True:
+    print("Task Running")
+    time.sleep(5)
+
+
+Runs every 5 seconds.
+
+
+==================================================
+12. REAL INDUSTRY USES
+==================================================
+
+- IT companies automation scripts
+- DevOps pipelines
+- Data backup systems
+- Business reporting tools
+- AI workflow automation
+
+
+QUIZ:
+
+1. What is automation?
+2. Which module handles files?
+3. What does os.listdir() do?
+4. Which function creates delay?
+5. What is pyautogui used for?
+
+
+CODING PROBLEM:
+
+Create 3 text files automatically:
+file1.txt, file2.txt, file3.txt
+
+Each should contain its file name.
+
+Example:
+
+for i in range(1, 4):
+    with open(f"file{i}.txt", "w") as f:
+        f.write(f"File {i}")
+
+
+HOMEWORK:
+
+1. Create 5 files automatically
+2. Write names into files
+3. List all files in folder
+4. Delete a test file
+5. Create a simple automation loop
+
+
+NOTES_SUMMARY:
+
+- Automation = tasks done automatically
+- Python can handle files, emails, UI actions
+- os module = file system control
+- pyautogui = keyboard/mouse automation
+- time.sleep() = delay system
+- Used in real industry workflows
+
+DAY: 29
+TITLE: Mini Projects in Python (Real-World Practice Day)
+
+EXPLANATION:
+
+Today is project-building practice day.
+
+Instead of learning new theory, we combine everything you learned:
+
+- Variables
+- Conditions
+- Loops
+- Functions
+- Lists
+- Dictionaries
+- Files
+
+Mini projects help you become job-ready and improve problem-solving skills.
+
+
+==================================================
+PROJECT 1: SIMPLE CALCULATOR
+==================================================
+
+Concepts used: functions, input, conditions
+
+def add(a, b):
+    return a + b
+
+def sub(a, b):
+    return a - b
+
+def mul(a, b):
+    return a * b
+
+def div(a, b):
+    if b == 0:
+        return "Cannot divide by zero"
+    return a / b
+
+print("1.Add 2.Sub 3.Mul 4.Div")
+
+choice = int(input("Enter choice: "))
+a = int(input("Enter first number: "))
+b = int(input("Enter second number: "))
+
+if choice == 1:
+    print(add(a, b))
+elif choice == 2:
+    print(sub(a, b))
+elif choice == 3:
+    print(mul(a, b))
+elif choice == 4:
+    print(div(a, b))
+else:
+    print("Invalid choice")
+
+
+==================================================
+PROJECT 2: TO-DO LIST APP
+==================================================
+
+Concepts used: list, loop, input
+
+tasks = []
+
+while True:
+    print("\n1.Add 2.View 3.Remove 4.Exit")
+    choice = int(input("Enter choice: "))
+
+    if choice == 1:
+        task = input("Enter task: ")
+        tasks.append(task)
+
+    elif choice == 2:
+        for t in tasks:
+            print("-", t)
+
+    elif choice == 3:
+        task = input("Enter task to remove: ")
+        if task in tasks:
+            tasks.remove(task)
+
+    elif choice == 4:
+        break
+
+
+==================================================
+PROJECT 3: STUDENT MARKS SYSTEM
+==================================================
+
+Concepts used: dictionary, loop
+
+students = {}
+
+n = int(input("Enter number of students: "))
+
+for i in range(n):
+    name = input("Enter name: ")
+    marks = int(input("Enter marks: "))
+    students[name] = marks
+
+print("\nRESULTS:")
+
+for name, marks in students.items():
+    print(name, ":", marks)
+
+
+==================================================
+PROJECT 4: PASSWORD CHECKER
+==================================================
+
+password = "python123"
+
+while True:
+    user = input("Enter password: ")
+
+    if user == password:
+        print("Access Granted")
+        break
+    else:
+        print("Try Again")
+
+
+==================================================
+PROJECT 5: FILE LOGGER
+==================================================
+
+with open("log.txt", "a") as file:
+    for i in range(3):
+        text = input("Enter log: ")
+        file.write(text + "\n")
+
+
+==================================================
+REAL WORLD USES
+==================================================
+
+- Calculator apps
+- Office task tools
+- Student management systems
+- Login systems
+- Data logging tools
+
+
+QUIZ:
+
+1. Which project uses dictionary?
+2. What loop is used in to-do app?
+3. Why do we use functions in calculator?
+4. Which project uses file handling?
+5. What happens when password matches?
+
+
+CODING PROBLEM:
+
+Create a simple number guessing game:
+
+- Generate random number (1-10)
+- User guesses until correct
+- Show "Correct" when matched
+
+
+Example:
+
+import random
+
+num = random.randint(1, 10)
+
+while True:
+    guess = int(input("Guess number: "))
+
+    if guess == num:
+        print("Correct")
+        break
+    else:
+        print("Try again")
+
+
+HOMEWORK:
+
+1. Improve calculator with power operation
+2. Add delete all feature in to-do list
+3. Sort student marks
+4. Add attempts limit in password system
+5. Save to-do list into file
+
+
+NOTES_SUMMARY:
+
+- Mini projects combine all Python concepts
+- Real practice improves coding skill
+- Use functions + loops + conditions together
+- File handling adds persistence
+- Projects prepare for real-world development
+
+DAY: 30
+TITLE: Final Capstone Project + Revision (Python Mastery Test)
+
+EXPLANATION:
+
+Congratulations 🎉 you reached Day 30!
+
+Today is your FINAL DAY. This is not just learning — it is your “Python readiness test”.
+
+You will:
+
+1. Revise all core concepts
+2. Solve a final project
+3. Answer interview-level questions
+4. Build a real-world mini system
+
+If you complete this day properly, you can confidently say:
+👉 “I know Python basics to intermediate level”
+
+
+==================================================
+1. FINAL REVISION MAP
+==================================================
+
+You learned:
+
+BASICS:
+- Variables
+- Data types
+- Input/Output
+
+LOGIC:
+- if, elif, else
+- loops (for, while)
+- break, continue
+
+STRUCTURES:
+- Lists
+- Tuples
+- Sets
+- Dictionaries
+
+ADVANCED:
+- Functions
+- File handling
+- OOP (classes, objects)
+- Modules
+- Exceptions
+- APIs
+- Automation
+- Web scraping
+
+
+==================================================
+2. FINAL CAPSTONE PROJECT
+==================================================
+
+PROJECT: SMART STUDENT MANAGEMENT SYSTEM
+
+Features:
+- Add student
+- View students
+- Search student
+- Store marks
+- Save to file
+- Error handling
+
+
+--------------------------------------------------
+CODE:
+--------------------------------------------------
+
+students = {}
+
+def add_student():
+    name = input("Enter name: ")
+    marks = int(input("Enter marks: "))
+    students[name] = marks
+    print("Student added successfully")
+
+def view_students():
+    if not students:
+        print("No students found")
+    else:
+        for name, marks in students.items():
+            print(name, ":", marks)
+
+def search_student():
+    name = input("Enter name to search: ")
+    if name in students:
+        print(name, "Marks:", students[name])
+    else:
+        print("Student not found")
+
+def save_to_file():
+    with open("students.txt", "w") as file:
+        for name, marks in students.items():
+            file.write(f"{name} : {marks}\n")
+    print("Data saved to file")
+
+while True:
+    print("\n1.Add 2.View 3.Search 4.Save 5.Exit")
+    choice = int(input("Enter choice: "))
+
+    if choice == 1:
+        add_student()
+    elif choice == 2:
+        view_students()
+    elif choice == 3:
+        search_student()
+    elif choice == 4:
+        save_to_file()
+    elif choice == 5:
+        break
+    else:
+        print("Invalid choice")
+
+
+==================================================
+3. INTERVIEW QUESTIONS
+==================================================
+
+1. What is difference between list and tuple?
+2. What is OOP?
+3. What is a function?
+4. What is exception handling?
+5. What is API?
+6. What is module?
+7. What is dictionary used for?
+8. What is loop?
+9. What is file handling?
+10. What is indentation in Python?
+
+
+==================================================
+4. CODING CHALLENGE
+==================================================
+
+Write a program:
+
+- Take 5 students input
+- Store in dictionary
+- Find highest marks student
+- Save result to file
+
+
+Example:
+
+students = {}
+
+for i in range(5):
+    name = input("Enter name: ")
+    marks = int(input("Enter marks: "))
+    students[name] = marks
+
+top_student = max(students, key=students.get)
+
+print("Top Student:", top_student)
+print("Marks:", students[top_student])
+
+with open("result.txt", "w") as file:
+    file.write(f"Top Student: {top_student} - {students[top_student]}")
+
+
+==================================================
+5. FINAL HOMEWORK (MASTER TASK)
+==================================================
+
+Build a COMPLETE PROJECT:
+
+"PYTHON PORTFOLIO SYSTEM"
+
+Include:
+- Student data management
+- File saving
+- Search system
+- Menu-driven program
+- Error handling
+- Clean code structure
+
+
+==================================================
+6. FINAL NOTES
+==================================================
+
+You completed 30 DAYS of Python:
+
+✔ Basics
+✔ Logic building
+✔ Data structures
+✔ Functions
+✔ File handling
+✔ OOP
+✔ Modules
+✔ APIs
+✔ Automation
+✔ Real projects
+
+This is your FOUNDATION.
+
+Next level:
+- Data Structures & Algorithms
+- Advanced OOP
+- Django / Flask Web Development
+- AI / Machine Learning
+
+
+==================================================
+FINAL MESSAGE
+==================================================
+
+Python is not memorization — it is practice.
+
+If you build projects daily, you will become strong.
+
+KEEP CODING. KEEP BUILDING. 🚀`;
+
+// For this code to work, we'll simulate the extraction logic based on the format you provided
+let pythonDays = [];
+let currentDayIdx = 0;
+let completedDays = 0;
+let totalScore = 0;
+const synth = window.speechSynthesis;
+
+// 1. SMART PARSER: Converts your text file into a JavaScript Object
+function parseCurriculum() {
+    // This logic mimics reading your text file format
+    const dayBlocks = rawTutorialData.split(/DAY:\s*(\d+)/g).filter(Boolean);
+    
+    for (let i = 0; i < dayBlocks.length; i += 2) {
+        let dayNum = dayBlocks[i];
+        let content = dayBlocks[i+1];
+
+        let title = content.match(/TITLE:\s*(.*)/)?.[1] || "Untitled";
+        let explanation = content.match(/EXPLANATION:([\s\S]*?)QUIZ:/)?.[1]?.trim() || "";
+        let quiz = content.match(/QUIZ:([\s\S]*?)CODING PROBLEM:/)?.[1]?.trim() || "Review the notes.";
+        let homework = content.match(/HOMEWORK:([\s\S]*?)NOTES_SUMMARY:/)?.[1]?.trim() || "";
+        let summary = content.match(/NOTES_SUMMARY:([\s\S]*?)$/)?.[1]?.trim() || "";
+
+        pythonDays.push({
+            day: dayNum,
+            title: title,
+            explanation: explanation,
+            quiz: quiz.split('\n')[0], // Takes the first question
+            ans: "", // In a real system, you'd define answers, here we'll accept any logical input
+            homework: homework,
+            summary: summary
+        });
+    }
+    renderDayList();
+}
+
+// 2. UI: RENDER THE DAY LIST
+function renderDayList() {
+    const list = document.getElementById("classList");
+    list.innerHTML = "";
+    pythonDays.forEach((d, idx) => {
+        let btn = document.createElement("button");
+        btn.className = "class-btn";
+        btn.innerHTML = `<b>Day ${d.day}</b>: ${d.title}`;
+        btn.onclick = () => openDay(idx);
+        list.appendChild(btn);
+    });
+}
+
+// 3. LOGIC: OPEN A SPECIFIC DAY
+function openDay(idx) {
+    currentDayIdx = idx;
+    const dayData = pythonDays[idx];
+
+    // Toggle Views
+    document.getElementById("welcomeView").style.display = "none";
+    document.getElementById("lessonView").style.display = "block";
+
+    // Update Content
+    document.getElementById("lessonTitle").innerText = `Day ${dayData.day} - ${dayData.title}`;
+    document.getElementById("lessonText").innerText = dayData.explanation;
+    document.getElementById("quizQ").innerText = dayData.quiz;
+    document.getElementById("notes").innerText = dayData.summary;
+    
+    // UI Effects
+    document.querySelectorAll(".class-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".class-btn")[idx].classList.add("active");
+    
+    document.getElementById("statusText").innerText = `Studying Day ${dayData.day}...`;
+    
+    speak(`Day ${dayData.day}. ${dayData.title}. ${dayData.summary}`);
+}
+
+function checkAnswer() {
+    const ans = document.getElementById("quizAns").value;
+    if(!ans) return alert("Please type an answer.");
+    
+    totalScore += 10;
+    completedDays = Math.max(completedDays, currentDayIdx + 1);
+    
+    document.getElementById("score").innerText = totalScore;
+    document.getElementById("done").innerText = completedDays;
+    
+    alert("Knowledge Verified! Homework assigned:\n\n" + pythonDays[currentDayIdx].homework);
+    document.getElementById("quizAns").value = "";
+}
+
+function speak(text) {
+    if(!synth) return;
+    synth.cancel();
+    let utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1.1;
+    synth.speak(utterance);
+}
+
+function downloadCertificate() {
+    if(completedDays < 30) return alert("You must complete all 30 days to unlock the certificate!");
+    let name = prompt("Enter full name for Certificate:");
+    let cert = `CODEFORGE PYTHON MASTERY\n\nCertified: ${name}\nStatus: Complete\nFinal Score: ${totalScore}`;
+    let blob = new Blob([cert], {type: "text/plain"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "Python_Mastery_Certificate.txt";
+    a.click();
+}
+
+// Initialize on Load
+window.onload = parseCurriculum;
+</script>
+</body>
+</html>

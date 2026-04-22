@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>CodeForge Home</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* FULL SCREEN */
+body{
+    background:url("homebg.png") center center/cover no-repeat;
+    position:relative;
+}
+
+/* Overlay */
+body::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to right,
+    rgba(0,0,0,.65),
+    rgba(0,0,0,.28),
+    rgba(0,0,0,.55));
+    z-index:0;
+}
+
+/* Main */
+.main{
+    position:relative;
+    z-index:2;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    padding:1.5vw;
+}
+
+/* TOP */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    min-height:70px;
+}
+
+.logo{
+    font-size:clamp(24px,4vw,48px);
+    font-weight:900;
+    background:linear-gradient(90deg,#00eaff,#fff,#ffae00);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.top-icons{
+    display:flex;
+    gap:10px;
+}
+
+.icon-btn{
+    width:clamp(45px,6vw,65px);
+    height:clamp(45px,6vw,65px);
+    border-radius:18px;
+    border:none;
+    color:#fff;
+    font-size:clamp(18px,2vw,28px);
+    cursor:pointer;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(8px);
+}
+
+/* CENTER AREA */
+.content{
+    flex:1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+/* LEFT MENU */
+.left-menu{
+    width:30%;
+    min-width:220px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.menu-btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:18px;
+    color:#fff;
+    font-size:clamp(15px,1.6vw,22px);
+    text-align:left;
+    cursor:pointer;
+    background:rgba(0,0,0,.45);
+    border:1px solid rgba(0,255,255,.22);
+    backdrop-filter:blur(8px);
+}
+
+.menu-btn i{
+    color:#00eaff;
+    margin-right:10px;
+}
+
+/* RIGHT PANEL */
+.right-panel{
+    width:80px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    align-items:center;
+}
+
+.quick-btn{
+    width:60px;
+    height:60px;
+    border:none;
+    border-radius:18px;
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    background:rgba(0,0,0,.45);
+    border:1px solid rgba(255,170,0,.35);
+}
+
+/* BOTTOM */
+.bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+}
+
+/* MODE BOX */
+.mode-box{
+    width:32%;
+    min-width:250px;
+    padding:16px;
+    border-radius:18px;
+    background:rgba(0,0,0,.45);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.mode-title{
+    font-size:clamp(18px,2vw,26px);
+    margin-bottom:10px;
+    font-weight:bold;
+}
+
+.mode{
+    padding:10px;
+    margin-top:8px;
+    border-radius:12px;
+    background:rgba(255,255,255,.05);
+    cursor:pointer;
+}
+
+/* START BUTTON */
+.start-btn{
+    padding:20px 55px;
+    font-size:clamp(28px,4vw,46px);
+    font-weight:900;
+    border:none;
+    border-radius:24px;
+    cursor:pointer;
+    color:#111;
+    background:linear-gradient(90deg,#ffe600,#ff9d00);
+    box-shadow:
+    0 0 20px #ffd000,
+    0 0 35px #ff9900;
+}
+
+/* ---------------- MOBILE PORTRAIT ---------------- */
+@media (orientation:portrait){
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Rotation Message */
+.main{
+    display:none;
+}
+
+.rotate-box{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    text-align:center;
+    padding:25px;
+    z-index:5;
+}
+
+.rotate-box i{
+    font-size:70px;
+    margin-bottom:20px;
+    color:#00eaff;
+    animation:spin 2s linear infinite;
+}
+
+.rotate-box h1{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.rotate-box p{
+    font-size:18px;
+    opacity:.9;
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(90deg);}
+}
+}
+
+/* ---------------- LANDSCAPE ONLY ---------------- */
+@media (orientation:landscape){
+.rotate-box{
+    display:none;
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ROTATE SCREEN MESSAGE -->
+<div class="rotate-box">
+<i class="fa-solid fa-mobile-screen"></i>
+<h1>Rotate Device</h1>
+<p>Please turn your phone horizontally for best experience.</p>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="main">
+
+<!-- TOP -->
+<div class="topbar">
+
+<div class="logo">⚔ CODEFORGE</div>
+
+<div class="top-icons">
+<button class="icon-btn" onclick="goPage('profile.html')"><i class="fa-solid fa-user"></i></button>
+<button class="icon-btn" onclick="goPage('ranking.html')"><i class="fa-solid fa-crown"></i></button>
+<button class="icon-btn" onclick="goPage('notifications.html')"><i class="fa-solid fa-bell"></i></button>
+<button class="icon-btn" onclick="goPage('settings.html')"><i class="fa-solid fa-gear"></i></button>
+</div>
+
+</div>
+
+<!-- CENTER -->
+<div class="content">
+
+<div class="left-menu">
+
+<button class="menu-btn" onclick="goPage('quiz.html')">
+<i class="fa-solid fa-brain"></i> Quiz Game
+</button>
+
+<button class="menu-btn" onclick="goPage('programming.html')">
+<i class="fa-solid fa-code"></i> Programming Game
+</button>
+
+<button class="menu-btn" onclick="goPage('chatbot.html')">
+<i class="fa-solid fa-bug"></i> ChatBot
+</button>
+
+<button class="menu-btn" onclick="goPage('tutorials.html')">
+<i class="fa-solid fa-trophy"></i> Tutorials
+</button>
+
+<button class="menu-btn" onclick="goPage('leaderboard.html')">
+<i class="fa-solid fa-book"></i> Leaderboard
+</button>
+
+</div>
+
+<div class="right-panel">
+
+<button class="quick-btn" onclick="goPage('shop.html')">
+<i class="fa-solid fa-store"></i>
+</button>
+
+<button class="quick-btn" onclick="goPage('events.html')">
+<i class="fa-solid fa-calendar"></i>
+</button>
+
+<button class="quick-btn" onclick="goPage('mail.html')">
+<i class="fa-solid fa-envelope"></i>
+</button>
+
+<button class="quick-btn" onclick="goPage('help.html')">
+<i class="fa-solid fa-circle-question"></i>
+</button>
+
+</div>
+
+</div>
+
+<!-- BOTTOM -->
+<div class="bottom">
+
+<div class="mode-box">
+<div class="mode-title">🔥 Select Mode</div>
+<div class="mode" onclick="goPage('easyquiz.html')">🧠 Easy Quiz</div>
+<div class="mode" onclick="goPage('codingbattle.html')">💻 Coding Battle</div>
+<div class="mode" onclick="goPage('bugfix.html')">🐞 Bug Fix</div>
+</div>
+
+<button class="start-btn" onclick="goPage('gameselect.html')">
+START
+</button>
+
+</div>
+
+</div>
+
+<script>
+function goPage(file){
+    window.location.href=file;
+}
+</script>
+
+</body>
+</html>
