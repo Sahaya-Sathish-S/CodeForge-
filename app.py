@@ -6,7 +6,7 @@ import json
 app = Flask(__name__, static_folder=".")
 CORS(app)
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "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"
 
 # =====================================
 # HOME
