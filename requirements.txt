@@ -1,4 +1,6 @@
-gunicorn
 flask
+flask-cors
+flask-socketio
+eventlet
 requests
-flask_cors
+gunicorn
