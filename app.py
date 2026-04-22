@@ -1,12 +1,24 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit, join_room
 import requests
 import json
+import os
+import random
 
 app = Flask(__name__, static_folder=".")
 CORS(app)
 
+# SOCKET
+socketio = SocketIO(app, cors_allowed_origins="*")
+
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+# =====================================
+# MULTIPLAYER DATA
+# =====================================
+waiting_players = []
+rooms_data = {}
 
 # =====================================
 # HOME
@@ -42,12 +54,12 @@ def ask():
             "model": "openai/gpt-4o-mini",
             "messages": [
                 {
-                    "role":"system",
-                    "content":"You are CodeForge AI. Helpful, smart, professional assistant."
+                    "role": "system",
+                    "content": "You are CodeForge AI. Helpful, smart, professional assistant."
                 },
                 {
-                    "role":"user",
-                    "content":msg
+                    "role": "user",
+                    "content": msg
                 }
             ]
         }
@@ -67,7 +79,7 @@ def ask():
 
 
 # =====================================
-# QUIZ GAME
+# QUIZ (OLD API ROUTE KEPT SAME)
 # =====================================
 @app.route("/quiz", methods=["GET"])
 def quiz():
@@ -100,7 +112,6 @@ First 2 easy.
 Last 3 medium/hard.
 
 Format:
-
 [
  {"q":"Question","o":["A","B","C","D"],"a":0}
 ]
@@ -112,9 +123,7 @@ Format:
         r = requests.post(url, headers=headers, json=payload, timeout=30)
 
         if r.status_code != 200:
-            return jsonify([
-                {"q":"API Failed","o":["A","B","C","D"],"a":0}
-            ])
+            raise Exception("API Failed")
 
         txt = r.json()["choices"][0]["message"]["content"].strip()
 
@@ -128,8 +137,102 @@ Format:
 
     except:
         return jsonify([
-            {"q":"Quiz Error","o":["A","B","C","D"],"a":0}
+            {"q":"HTML full form?","o":["Hyper Text Markup Language","High Text","Mail","None"],"a":0},
+            {"q":"CSS used for?","o":["Style","Virus","Database","Audio"],"a":0},
+            {"q":"Python keyword for loop?","o":["loop","for","go","repeat"],"a":1},
+            {"q":"SQL used for?","o":["Styling","Database","Video","Drawing"],"a":1},
+            {"q":"JS runs mainly in?","o":["Browser","Mouse","RAM","Fan"],"a":0}
         ])
+
+
+# =====================================
+# MULTIPLAYER QUIZ SOCKET
+# =====================================
+
+@socketio.on("find_match")
+def find_match():
+    sid = request.sid
+
+    if sid not in waiting_players:
+        waiting_players.append(sid)
+
+    if len(waiting_players) >= 2:
+        p1 = waiting_players.pop(0)
+        p2 = waiting_players.pop(0)
+
+        room = f"room_{random.randint(1000,9999)}"
+
+        join_room(room, sid=p1)
+        join_room(room, sid=p2)
+
+        # SAME QUESTIONS BOTH PLAYERS
+        questions = [
+            {"q":"Python keyword for function?","o":["func","define","def","fun"],"a":2},
+            {"q":"HTML full form?","o":["Hyper Text Markup Language","Mail","None","High"],"a":0},
+            {"q":"CSS used for?","o":["Style","Database","Virus","Audio"],"a":0},
+            {"q":"2 + 5 = ?","o":["6","7","8","9"],"a":1},
+            {"q":"JavaScript runs in?","o":["Browser","Keyboard","Mouse","RAM"],"a":0}
+        ]
+
+        rooms_data[room] = {
+            "p1": 0,
+            "p2": 0,
+            "questions": questions
+        }
+
+        emit("match_found", {
+            "room": room,
+            "player": "p1",
+            "questions": questions
+        }, to=p1)
+
+        emit("match_found", {
+            "room": room,
+            "player": "p2",
+            "questions": questions
+        }, to=p2)
+
+
+@socketio.on("submit_answer")
+def submit_answer(data):
+    room = data["room"]
+    player = data["player"]
+    correct = data["correct"]
+
+    if room not in rooms_data:
+        return
+
+    if correct:
+        rooms_data[room][player] += 1
+
+    emit("score_update", {
+        "p1": rooms_data[room]["p1"],
+        "p2": rooms_data[room]["p2"]
+    }, room=room)
+
+
+@socketio.on("finish_game")
+def finish_game(data):
+    room = data["room"]
+
+    if room not in rooms_data:
+        return
+
+    p1 = rooms_data[room]["p1"]
+    p2 = rooms_data[room]["p2"]
+
+    winner = "🤝 DRAW"
+
+    if p1 > p2:
+        winner = "🏆 PLAYER 1 WINS"
+    elif p2 > p1:
+        winner = "🏆 PLAYER 2 WINS"
+
+    emit("game_result", {
+        "winner": winner,
+        "p1": p1,
+        "p2": p2
+    }, room=room)
 
 
 # =====================================
@@ -187,7 +290,7 @@ Return ONLY JSON:
 
         return jsonify(obj)
 
-    except Exception as e:
+    except:
         return jsonify({
             "problem":"Write code to print Hello World",
             "bot_code":"print('Hello World')"
@@ -283,4 +386,4 @@ Return ONLY JSON:
 # RUN
 # =====================================
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
