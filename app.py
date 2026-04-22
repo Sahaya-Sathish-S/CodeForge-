@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
 import json
+import os
 
 app = Flask(__name__, static_folder=".")
 CORS(app)
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # =====================================
 # HOME
