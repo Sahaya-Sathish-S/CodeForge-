@@ -2,14 +2,11 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
 import json
-import os
-import random
-from flask_socketio import SocketIO, emit, join_room
 
 app = Flask(__name__, static_folder=".")
 CORS(app)
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_API_KEY = "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"
 
 # =====================================
 # HOME
@@ -58,7 +55,7 @@ def ask():
         r = requests.post(url, headers=headers, json=payload, timeout=30)
 
         if r.status_code != 200:
-            return jsonify({"reply": "API Error"})
+            return jsonify({"reply": f"API Error: {r.text}"})
 
         result = r.json()
         reply = result["choices"][0]["message"]["content"]
