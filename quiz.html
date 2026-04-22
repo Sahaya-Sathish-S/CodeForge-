@@ -65,7 +65,6 @@ z-index:5;
 
 .show{display:block}
 
-/* SEARCH */
 .search-box{
 position:absolute;
 top:50%;
@@ -93,7 +92,6 @@ font-weight:bold;
 text-shadow:0 0 15px #00ffff;
 }
 
-/* TOP */
 .topbar{
 position:absolute;
 top:10px;
@@ -129,7 +127,6 @@ text-align:center;
 font-size:26px;
 }
 
-/* QUIZ */
 .quiz-wrap{
 position:absolute;
 top:78px;
@@ -171,14 +168,7 @@ box-shadow:0 0 12px rgba(255,255,255,.15);
 transition:.2s;
 }
 
-.opt:active,
-.opt:hover{
-transform:scale(1.03);
-}
-
-.opt.selected{
-background:linear-gradient(90deg,#00ffff,#0066ff);
-}
+.opt:hover{transform:scale(1.03)}
 
 .opt.correct{
 background:linear-gradient(90deg,#00ff88,#00cc66);
@@ -200,7 +190,6 @@ animation:blink .8s infinite;
 50%{opacity:.25}
 }
 
-/* RESULT */
 .result-box{
 position:absolute;
 top:50%;
@@ -252,7 +241,6 @@ background:linear-gradient(90deg,#ffe600,#ff9900);
 box-shadow:0 0 18px #ffb400;
 }
 
-/* ROTATE */
 .rotate{
 position:fixed;
 inset:0;
@@ -277,7 +265,6 @@ z-index:999;
 
 <div class="game">
 
-<!-- SEARCH -->
 <div id="searchScreen" class="layer show">
 <div class="search-box">
 <div class="glass">🔍</div>
@@ -285,22 +272,20 @@ z-index:999;
 </div>
 </div>
 
-<!-- QUIZ -->
 <div id="quizScreen" class="layer">
 <div class="topbar">
 <div class="player youBox">YOU : <span id="youScore">0</span></div>
 <div class="timer" id="timer">20</div>
-<div class="player botBox">BOT : <span id="botScore">0</span></div>
+<div class="player botBox">OPP : <span id="botScore">0</span></div>
 </div>
 
 <div class="quiz-wrap">
 <div class="question" id="question">Loading...</div>
 <div class="options" id="options"></div>
-<div class="think" id="think">🤖 Opponent Thinking...</div>
+<div class="think" id="think">⚔ Live Battle</div>
 </div>
 </div>
 
-<!-- RESULT -->
 <div id="resultScreen" class="layer">
 <div class="result-box">
 <h1 id="resultTitle">RESULT</h1>
@@ -308,8 +293,8 @@ z-index:999;
 <div class="stats">
 <div class="card">✅ Correct : <span id="correctCount">0</span></div>
 <div class="card">❌ Wrong : <span id="wrongCount">0</span></div>
-<div class="card">⏱ Your Time : <span id="myTime">0</span>s</div>
-<div class="card">⚔ Opp Time : <span id="botTime">0</span>s</div>
+<div class="card">🏆 Your Score : <span id="myTime">0</span></div>
+<div class="card">⚔ Opp Score : <span id="botTime">0</span></div>
 </div>
 
 <div class="tip" id="tipText"></div>
@@ -320,149 +305,102 @@ z-index:999;
 
 </div>
 
-<script>
-/* =========================
-   AI QUESTIONS
-========================= */
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
+<script>
+const socket = io();
+
+let room = "";
+let player = "";
 let quiz = [];
 
-/* LOAD QUESTIONS FIRST */
-async function loadAIQuiz(){
-
-try{
-
-const res = await fetch("/quiz");
-quiz = await res.json();
-
-/* validate */
-if(!Array.isArray(quiz) || quiz.length === 0){
-throw new Error("No questions");
-}
-
-/* start game only AFTER questions loaded */
-startGame();
-
-}catch(err){
-
-console.log(err);
-
-/* fallback offline questions */
-quiz = [
-{q:"HTML stands for ?",o:["Hyper Text Markup Language","Mail","None","High"],a:0},
-{q:"CSS used for ?",o:["Styling","Database","Audio","Virus"],a:0},
-{q:"JavaScript is ?",o:["Programming Language","Browser","Game","Server"],a:0},
-{q:"2 + 2 = ?",o:["4","5","6","3"],a:0},
-{q:"Python is ?",o:["Language","Snake only","Car","Tool"],a:0}
-];
-
-startGame();
-
-}
-
-}
-
-/* START GAME */
-function startGame(){
-
-setTimeout(()=>{
-
-document.getElementById("searchScreen").classList.remove("show");
-document.getElementById("quizScreen").classList.add("show");
-
-loadQuestion();
-
-},3000);
-
-}
-
-/* CALL */
-loadAIQuiz();
-
-
-/* =========================
-STATE
-========================= */
 let index=0;
 let you=0;
 let bot=0;
 let correct=0;
 let wrong=0;
-let myTotal=0;
-let botTotal=0;
 let timeLeft=20;
 let timerInterval=null;
-let selected=false;
+let answered=false;
 
+/* SEARCH MATCH */
+socket.emit("find_match");
 
-/* AUDIO */
-const bgMusic = new Audio("bg-music.mp3");
-const victoryMusic = new Audio("victory.mp3");
-const loseMusic = new Audio("lose.mp3");
+/* MATCH FOUND */
+socket.on("match_found",(data)=>{
 
-bgMusic.loop=true;
-bgMusic.volume=1;
-victoryMusic.volume=1;
-loseMusic.volume=1;
+room = data.room;
+player = data.player;
+quiz = data.questions;
 
-const ctx = new (window.AudioContext || window.webkitAudioContext)();
+setTimeout(()=>{
+searchScreen.classList.remove("show");
+quizScreen.classList.add("show");
+loadQuestion();
+},2000);
 
-function tone(freq,dur,type="sine",vol=.2){
-let osc=ctx.createOscillator();
-let gain=ctx.createGain();
-osc.type=type;
-osc.frequency.value=freq;
-gain.gain.value=vol;
-osc.connect(gain);
-gain.connect(ctx.destination);
-osc.start();
-osc.stop(ctx.currentTime+dur);
+});
+
+/* SCORE UPDATE */
+socket.on("score_update",(data)=>{
+
+if(player==="p1"){
+you = data.p1;
+bot = data.p2;
+}else{
+you = data.p2;
+bot = data.p1;
 }
 
-function playRight(){
-tone(900,.10,"triangle",.25);
-setTimeout(()=>tone(1200,.14,"triangle",.25),90);
+youScore.innerText = you;
+botScore.innerText = bot;
+
+});
+
+/* FINAL RESULT */
+socket.on("game_result",(data)=>{
+
+quizScreen.classList.remove("show");
+resultScreen.classList.add("show");
+
+let my = player==="p1" ? data.p1 : data.p2;
+let opp = player==="p1" ? data.p2 : data.p1;
+
+myTime.innerText = my;
+botTime.innerText = opp;
+correctCount.innerText = correct;
+wrongCount.innerText = wrong;
+
+let title="🤝 DRAW";
+let tip="Perfect battle!";
+
+if(my > opp){
+title="🏆 YOU WIN!";
+tip="Excellent performance!";
+}
+else if(my < opp){
+title="💀 YOU LOSE!";
+tip="Practice more and retry.";
 }
 
-function playWrong(){
-tone(220,.20,"sawtooth",.25);
-setTimeout(()=>tone(160,.22,"sawtooth",.22),100);
-}
+resultTitle.innerText = title;
+tipText.innerText = tip;
 
-function heartbeat(){
-tone(120,.08,"square",.25);
-setTimeout(()=>tone(90,.08,"square",.22),180);
-}
+});
 
-function vibrate(ms){
-if(navigator.vibrate) navigator.vibrate(ms);
-}
-
-document.body.addEventListener("click",startAudio,{once:true});
-document.body.addEventListener("touchstart",startAudio,{once:true});
-
-function startAudio(){
-ctx.resume();
-bgMusic.play().catch(()=>{});
-}
-
-
-/* =========================
-LOAD QUESTION
-========================= */
+/* QUESTION LOAD */
 function loadQuestion(){
 
 if(index >= quiz.length){
-finishGame();
+socket.emit("finish_game",{room});
 return;
 }
 
-selected=false;
+answered=false;
 timeLeft=20;
 
 question.innerText = quiz[index].q;
 options.innerHTML="";
-think.style.display="block";
 
 quiz[index].o.forEach((txt,i)=>{
 
@@ -475,32 +413,27 @@ options.appendChild(btn);
 
 });
 
-clearInterval(timerInterval);
-
 timer.innerText=timeLeft;
-timer.style.color="#fff";
+
+clearInterval(timerInterval);
 
 timerInterval=setInterval(()=>{
 
 timeLeft--;
 timer.innerText=timeLeft;
 
-if(timeLeft<=10 && timeLeft>0){
-timer.style.color="#ff4444";
-heartbeat();
-}
-
 if(timeLeft<=0){
-
 clearInterval(timerInterval);
 
-if(!selected){
+if(!answered){
 wrong++;
-playWrong();
-vibrate(200);
+socket.emit("submit_answer",{
+room:room,
+player:player,
+correct:false
+});
+nextQuestion();
 }
-
-botAnswer();
 
 }
 
@@ -508,97 +441,42 @@ botAnswer();
 
 }
 
-
 /* PICK */
 function pickAnswer(i,btn){
 
-if(selected) return;
-selected=true;
+if(answered) return;
+answered=true;
 
 clearInterval(timerInterval);
 
 document.querySelectorAll(".opt").forEach(x=>x.disabled=true);
 
-if(i===quiz[index].a){
+let isCorrect = i === quiz[index].a;
 
+if(isCorrect){
 btn.classList.add("correct");
-you++;
 correct++;
-playRight();
-
 }else{
-
 btn.classList.add("wrong");
 wrong++;
-playWrong();
-vibrate([120,60,120]);
+}
+
+socket.emit("submit_answer",{
+room:room,
+player:player,
+correct:isCorrect
+});
+
+nextQuestion();
 
 }
 
-youScore.innerText=you;
-
-myTotal += (20-timeLeft);
-
-botAnswer();
-
-}
-
-
-/* BOT */
-function botAnswer(){
-
-setTimeout(()=>{
-
-if(Math.random()>0.35) bot++;
-
-botScore.innerText=bot;
-botTotal += Math.floor(Math.random()*18)+2;
-
-think.style.display="none";
-
+/* NEXT */
+function nextQuestion(){
 setTimeout(()=>{
 index++;
 loadQuestion();
-},900);
-
-},900+Math.random()*1200);
-
-}
-
-
-/* RESULT */
-function finishGame(){
-
-quizScreen.classList.remove("show");
-resultScreen.classList.add("show");
-
-bgMusic.pause();
-bgMusic.currentTime=0;
-
-let title="🤝 DRAW";
-let tip="Perfect battle!";
-
-if(you>bot){
-title="🏆 YOU WIN!";
-tip="Excellent performance!";
-victoryMusic.play();
-}
-else if(bot>you){
-title="💀 YOU LOSE!";
-tip="Practice more and retry.";
-loseMusic.play();
-}
-else{
-victoryMusic.play();
-}
-
-resultTitle.innerText=title;
-correctCount.innerText=correct;
-wrongCount.innerText=wrong;
-myTime.innerText=myTotal;
-botTime.innerText=botTotal;
-tipText.innerText=tip;
-
+},1200);
 }
 </script>
 
