@@ -10,6 +10,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
@@ -18,87 +19,233 @@ overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
-font-family:Arial, sans-serif;
 background:url("background.png") center center/cover no-repeat;
 position:relative;
-cursor:pointer;
 }
 
-/* Dark overlay */
+/* DARK OVERLAY */
 body::before{
 content:'';
 position:absolute;
 inset:0;
-background:rgba(0,0,0,.45);
+background:rgba(0,0,0,.58);
+backdrop-filter:blur(3px);
 }
 
-/* Center box */
-.tap-box{
+/* ANIMATED LIGHT */
+body::after{
+content:'';
+position:absolute;
+width:460px;
+height:460px;
+border-radius:50%;
+background:radial-gradient(circle,#00d9ff55,transparent 70%);
+top:-100px;
+left:-120px;
+animation:lightMove 8s linear infinite alternate;
+}
+
+@keyframes lightMove{
+0%{transform:translate(0,0);}
+100%{transform:translate(260px,180px);}
+}
+
+/* SECOND LIGHT */
+.light2{
+position:absolute;
+right:-120px;
+bottom:-120px;
+width:420px;
+height:420px;
+border-radius:50%;
+background:radial-gradient(circle,#ff660055,transparent 70%);
+animation:lightMove2 9s linear infinite alternate;
+z-index:1;
+}
+
+@keyframes lightMove2{
+0%{transform:translate(0,0);}
+100%{transform:translate(-180px,-140px);}
+}
+
+/* MAIN CONTENT */
+.wrapper{
 position:relative;
-z-index:2;
+z-index:5;
 text-align:center;
-padding:35px 45px;
-border-radius:22px;
-background:rgba(255,255,255,.06);
-backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,.12);
-box-shadow:
-0 0 25px rgba(0,204,255,.35),
-0 0 35px rgba(255,102,0,.25);
-animation:float 2s ease-in-out infinite;
+width:90%;
+max-width:700px;
 }
 
-@keyframes float{
-0%,100%{transform:translateY(0);}
-50%{transform:translateY(-10px);}
-}
-
+/* LOGO */
 .logo{
-font-size:48px;
+font-size:64px;
 font-weight:900;
+letter-spacing:3px;
 background:linear-gradient(90deg,#00d9ff,#ffffff,#ff6600);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-text-shadow:0 0 20px #00ccff;
-margin-bottom:15px;
+text-shadow:
+0 0 14px #00d9ff,
+0 0 28px #0066ff;
+animation:floatLogo 3s ease-in-out infinite;
+}
+
+@keyframes floatLogo{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+}
+
+/* SUBTEXT */
+.sub{
+margin-top:14px;
+font-size:18px;
+color:#eee;
 letter-spacing:2px;
 }
 
-.text{
-font-size:24px;
-color:white;
-letter-spacing:3px;
-animation:blink 1.2s infinite;
+/* CARD */
+.panel{
+margin:38px auto 0;
+padding:26px;
+max-width:420px;
+border-radius:24px;
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(16px);
+border:1px solid rgba(255,255,255,.12);
+box-shadow:
+0 0 18px #00d9ff33,
+0 0 35px #0066ff22;
 }
 
-@keyframes blink{
-0%,100%{opacity:1;}
-50%{opacity:.4;}
+/* STATUS */
+.status{
+font-size:16px;
+margin-bottom:18px;
+font-weight:bold;
+color:#00ffcc;
+min-height:22px;
 }
 
-/* Mobile */
+/* BUTTONS */
+.btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:16px;
+cursor:pointer;
+font-size:17px;
+font-weight:bold;
+color:#fff;
+margin-bottom:14px;
+transition:.25s;
+}
+
+.login-btn{
+background:linear-gradient(90deg,#00d9ff,#0055ff,#00d9ff);
+background-size:200% 200%;
+animation:flow1 3s linear infinite;
+box-shadow:0 0 15px #00d9ff66;
+}
+
+.enter-btn{
+background:linear-gradient(90deg,#ff6600,#ff00aa,#00d9ff,#ff6600);
+background-size:300% 300%;
+animation:flow2 3s linear infinite;
+box-shadow:0 0 16px #ff660066;
+}
+
+.logout-btn{
+background:linear-gradient(90deg,#ff4444,#aa0000);
+box-shadow:0 0 14px #ff444466;
+}
+
+.btn:hover{
+transform:translateY(-2px) scale(1.02);
+}
+
+@keyframes flow1{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+@keyframes flow2{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+.hidden{
+display:none;
+}
+
+/* MOBILE */
 @media(max-width:700px){
-.logo{font-size:34px;}
-.text{font-size:18px;}
-.tap-box{
-width:90%;
-padding:25px;
-}
+.logo{font-size:42px;}
+.sub{font-size:15px;}
+.panel{padding:20px;}
 }
 </style>
 </head>
 
-<body onclick="openHome()">
+<body>
 
-<div class="tap-box">
+<div class="light2"></div>
+
+<div class="wrapper">
+
 <div class="logo">CODEFORGE</div>
-<div class="text">TAP ANYWHERE TO START</div>
+<div class="sub">MODERN CODING EXPERIENCE</div>
+
+<div class="panel">
+
+<div class="status" id="status"></div>
+
+<button class="btn login-btn" id="loginBtn">LOGIN</button>
+
+<button class="btn enter-btn hidden" id="enterBtn">ENTER CODEFORGE</button>
+
+<button class="btn logout-btn hidden" id="logoutBtn">LOGOUT</button>
+
+</div>
+
 </div>
 
 <script>
-function openHome(){
-window.location.href="home.html";
+const user = localStorage.getItem("codeforge_user");
+
+const statusBox = document.getElementById("status");
+const loginBtn = document.getElementById("loginBtn");
+const enterBtn = document.getElementById("enterBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+/* CHECK LOGIN */
+if(user){
+statusBox.innerText = "Account Verified • Logged In";
+loginBtn.classList.add("hidden");
+enterBtn.classList.remove("hidden");
+logoutBtn.classList.remove("hidden");
+}else{
+statusBox.innerText = "Please login to continue";
+loginBtn.classList.remove("hidden");
+enterBtn.classList.add("hidden");
+logoutBtn.classList.add("hidden");
 }
+
+/* LOGIN */
+loginBtn.onclick = function(){
+window.location.href = "auth.html";
+};
+
+/* ENTER HOME */
+enterBtn.onclick = function(){
+window.location.href = "home.html";
+};
+
+/* LOGOUT */
+logoutBtn.onclick = function(){
+localStorage.removeItem("codeforge_user");
+window.location.reload();
+};
 </script>
 
 </body>
