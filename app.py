@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, session, redirect
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room
 import requests
@@ -7,6 +7,8 @@ import os
 import random
 
 app = Flask(__name__, static_folder=".")
+app.secret_key = "codeforge_secret_key_2026"
+
 CORS(app)
 
 # SOCKET
@@ -25,11 +27,63 @@ rooms_data = {}
 # =====================================
 @app.route("/")
 def home():
+    if "user" not in session:
+        return redirect("/auth")
+
     return send_from_directory(".", "index.html")
+
+
+@app.route("/auth")
+def auth_page():
+    return send_from_directory(".", "auth.html")
+
 
 @app.route("/<path:path>")
 def files(path):
     return send_from_directory(".", path)
+
+
+# =====================================
+# LOGIN SUCCESS
+# =====================================
+@app.route("/login_success", methods=["POST"])
+def login_success():
+    try:
+        data = request.get_json(force=True)
+
+        session["user"] = {
+            "email": data.get("email", ""),
+            "name": data.get("name", "")
+        }
+
+        return jsonify({"success": True})
+
+    except:
+        return jsonify({"success": False})
+
+
+# =====================================
+# CHECK LOGIN
+# =====================================
+@app.route("/check_login")
+def check_login():
+    if "user" in session:
+        return jsonify({
+            "loggedIn": True,
+            "user": session["user"]
+        })
+
+    return jsonify({"loggedIn": False})
+
+
+# =====================================
+# LOGOUT
+# =====================================
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/auth")
+
 
 # =====================================
 # CHATBOT
@@ -148,7 +202,6 @@ Format:
 # =====================================
 # MULTIPLAYER QUIZ SOCKET
 # =====================================
-
 @socketio.on("find_match")
 def find_match():
     sid = request.sid
@@ -165,7 +218,6 @@ def find_match():
         join_room(room, sid=p1)
         join_room(room, sid=p2)
 
-        # SAME QUESTIONS BOTH PLAYERS
         questions = [
             {"q":"Python keyword for function?","o":["func","define","def","fun"],"a":2},
             {"q":"HTML full form?","o":["Hyper Text Markup Language","Mail","None","High"],"a":0},
