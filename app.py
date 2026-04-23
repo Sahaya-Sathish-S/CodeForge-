@@ -27,9 +27,6 @@ rooms_data = {}
 # =====================================
 @app.route("/")
 def home():
-    if "user" not in session:
-        return redirect("/auth")
-
     return send_from_directory(".", "index.html")
 
 
