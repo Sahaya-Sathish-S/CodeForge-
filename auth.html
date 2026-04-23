@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CodeForge Auth</title>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:url("login-bg.png") center center/cover no-repeat;
+overflow:hidden;
+position:relative;
+}
+
+/* DARK LAYER */
+body::before{
+content:'';
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.68);
+backdrop-filter:blur(5px);
+z-index:1;
+}
+
+/* BLUE GLOW */
+body::after{
+content:'';
+position:absolute;
+width:550px;
+height:550px;
+border-radius:50%;
+background:radial-gradient(circle,#00d9ff55,transparent 70%);
+top:-140px;
+left:-120px;
+animation:move1 7s linear infinite alternate;
+z-index:1;
+}
+
+@keyframes move1{
+0%{transform:translate(0,0);}
+100%{transform:translate(220px,180px);}
+}
+
+.light2{
+position:absolute;
+right:-100px;
+bottom:-100px;
+width:420px;
+height:420px;
+border-radius:50%;
+background:radial-gradient(circle,#ff660055,transparent 70%);
+animation:move2 8s linear infinite alternate;
+z-index:1;
+}
+
+@keyframes move2{
+0%{transform:translate(0,0);}
+100%{transform:translate(-180px,-140px);}
+}
+
+/* BOX */
+.box{
+position:relative;
+z-index:5;
+width:95%;
+max-width:430px;
+padding:34px 26px;
+border-radius:28px;
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,.12);
+box-shadow:
+0 0 20px #00d9ff55,
+0 0 45px #0066ff44,
+0 0 60px #ff660033;
+overflow:hidden;
+animation:floatBox 3s ease-in-out infinite;
+}
+
+@keyframes floatBox{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+}
+
+/* MOVING BORDER */
+.box::before{
+content:'';
+position:absolute;
+inset:0;
+padding:2px;
+border-radius:28px;
+background:linear-gradient(90deg,#00d9ff,#0055ff,#ff6600,#ff00cc,#00d9ff);
+background-size:400% 400%;
+animation:borderMove 5s linear infinite;
+-webkit-mask:
+linear-gradient(#fff 0 0) content-box,
+linear-gradient(#fff 0 0);
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+pointer-events:none;
+}
+
+@keyframes borderMove{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+.title{
+text-align:center;
+font-size:42px;
+font-weight:900;
+letter-spacing:2px;
+margin-bottom:22px;
+background:linear-gradient(90deg,#00d9ff,#ffffff,#ff6600);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+text-shadow:0 0 12px #00d9ff,0 0 20px #0055ff;
+}
+
+.tabs{
+display:flex;
+margin-bottom:20px;
+border-radius:14px;
+overflow:hidden;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+position:relative;
+z-index:20;
+}
+
+.tab{
+flex:1;
+padding:14px;
+text-align:center;
+font-weight:bold;
+color:#fff;
+cursor:pointer;
+transition:.3s;
+user-select:none;
+}
+
+.tab.active{
+background:linear-gradient(90deg,#00d9ff,#0055ff);
+box-shadow:0 0 15px #00d9ff;
+}
+
+.form{
+display:none;
+position:relative;
+z-index:20;
+}
+
+.form.show{
+display:block;
+animation:fade .35s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+input{
+width:100%;
+padding:15px 16px;
+margin-bottom:14px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,.14);
+outline:none;
+font-size:16px;
+color:#fff;
+background:rgba(255,255,255,.09);
+transition:.25s;
+}
+
+input:focus{
+border:1px solid #00d9ff;
+box-shadow:0 0 10px #00d9ff66;
+background:rgba(255,255,255,.13);
+}
+
+input::placeholder{
+color:#d0d0d0;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+color:#fff;
+background:linear-gradient(90deg,#ff6600,#ff00aa,#00d9ff,#ff6600);
+background-size:300% 300%;
+animation:btnGlow 3s linear infinite;
+box-shadow:0 0 14px #ff6600,0 0 25px #00d9ff55;
+transition:.25s;
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+@keyframes btnGlow{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+.bottom{
+text-align:center;
+margin-top:14px;
+font-size:14px;
+color:#ddd;
+}
+
+a{
+color:#00d9ff;
+font-weight:bold;
+cursor:pointer;
+text-decoration:none;
+}
+
+.status{
+text-align:center;
+margin-top:14px;
+min-height:20px;
+font-size:14px;
+color:#00ff99;
+}
+
+@media(max-width:600px){
+.title{font-size:34px;}
+.box{padding:26px 18px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="light2"></div>
+
+<div class="box">
+
+<div class="title">CODEFORGE</div>
+
+<div class="tabs">
+<div class="tab active" id="loginTab">LOGIN</div>
+<div class="tab" id="signupTab">SIGN UP</div>
+</div>
+
+<!-- LOGIN -->
+<div class="form show" id="loginForm">
+<input type="email" id="loginEmail" placeholder="Enter Email">
+<input type="password" id="loginPassword" placeholder="Enter Password">
+<button id="loginBtn">LOGIN</button>
+
+<div class="bottom">
+No account?
+<a id="gotoSignup">Create One</a>
+</div>
+</div>
+
+<!-- SIGNUP -->
+<div class="form" id="signupForm">
+<input type="text" id="name" placeholder="Full Name">
+<input type="email" id="signupEmail" placeholder="Email Address">
+<input type="password" id="signupPassword" placeholder="Create Password">
+<input type="password" id="confirmPassword" placeholder="Confirm Password">
+
+<button id="signupBtn">CREATE ACCOUNT</button>
+
+<div class="bottom">
+Already have account?
+<a id="gotoLogin">Login</a>
+</div>
+</div>
+
+<div class="status" id="status"></div>
+
+</div>
+
+<script>
+/* ===========================
+SUPABASE
+=========================== */
+
+const SUPABASE_URL = "https://mdgxhwixmhfpeljjhxle.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kZ3hod2l4bWhmcGVsampoeGxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MDczOTEsImV4cCI6MjA5MjQ4MzM5MX0.3asVoI_DU6D_tfaMfW3gVL7qVRXq3TaGB8Uxsknh6Vk";
+
+const supabaseClient = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+/* ===========================
+ELEMENTS
+=========================== */
+
+const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
+const loginTab = document.getElementById("loginTab");
+const signupTab = document.getElementById("signupTab");
+const statusBox = document.getElementById("status");
+
+/* ===========================
+TAB SWITCH
+=========================== */
+
+function showLogin(){
+loginForm.classList.add("show");
+signupForm.classList.remove("show");
+loginTab.classList.add("active");
+signupTab.classList.remove("active");
+statusBox.innerText = "";
+}
+
+function showSignup(){
+signupForm.classList.add("show");
+loginForm.classList.remove("show");
+signupTab.classList.add("active");
+loginTab.classList.remove("active");
+statusBox.innerText = "";
+}
+
+loginTab.onclick = showLogin;
+signupTab.onclick = showSignup;
+document.getElementById("gotoSignup").onclick = showSignup;
+document.getElementById("gotoLogin").onclick = showLogin;
+
+/* ===========================
+SIGNUP USING users TABLE
+Table columns:
+id (auto)
+name
+email
+password
+created_at
+=========================== */
+
+async function signup(){
+
+const name = document.getElementById("name").value.trim();
+const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+const password = document.getElementById("signupPassword").value;
+const confirm = document.getElementById("confirmPassword").value;
+
+if(!name || !email || !password || !confirm){
+statusBox.innerText = "Fill all fields";
+return;
+}
+
+if(password !== confirm){
+statusBox.innerText = "Passwords do not match";
+return;
+}
+
+statusBox.innerText = "Creating account...";
+
+/* check existing email */
+const { data:existing } = await supabaseClient
+.from("users")
+.select("id")
+.eq("email", email)
+.limit(1);
+
+if(existing && existing.length > 0){
+statusBox.innerText = "Email already registered";
+return;
+}
+
+/* insert */
+const { error } = await supabaseClient
+.from("users")
+.insert([
+{
+name:name,
+email:email,
+password:password
+}
+]);
+
+if(error){
+statusBox.innerText = error.message;
+return;
+}
+
+statusBox.innerText = "Signup success! Please login.";
+showLogin();
+}
+
+/* ===========================
+LOGIN USING users TABLE
+=========================== */
+
+async function login(){
+
+const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+const password = document.getElementById("loginPassword").value;
+
+if(!email || !password){
+statusBox.innerText = "Enter email & password";
+return;
+}
+
+statusBox.innerText = "Checking...";
+
+const { data, error } = await supabaseClient
+.from("users")
+.select("*")
+.eq("email", email)
+.eq("password", password)
+.limit(1);
+
+if(error){
+statusBox.innerText = error.message;
+return;
+}
+
+if(!data || data.length === 0){
+statusBox.innerText = "Invalid login details";
+return;
+}
+
+/* save local session */
+localStorage.setItem("codeforge_user", JSON.stringify(data[0]));
+
+statusBox.innerText = "Login Success! Redirecting...";
+
+setTimeout(()=>{
+window.location.href="/";
+},1000);
+}
+
+/* ===========================
+BUTTON EVENTS
+=========================== */
+
+document.getElementById("signupBtn").onclick = signup;
+document.getElementById("loginBtn").onclick = login;
+
+/* ===========================
+AUTO LOGIN
+=========================== */
+
+if(localStorage.getItem("codeforge_user")){
+window.location.href="start.html";
+}
+</script>
+
+</body>
+</html>
